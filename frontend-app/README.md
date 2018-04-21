@@ -25,3 +25,15 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## Notes
+
+Expired access token will be automatically renewed. `silent-refresh.html` will be loaded for that. Uses `oidc-client.min.js` which was copied manually from `node_modules`. Need to automate that.
+Authentication process made by following those tutorials:
+
+[SPA Authentiction using OpenID Connect, Angular CLI and oidc-client](https://www.scottbrady91.com/Angular/SPA-Authentiction-using-OpenID-Connect-Angular-CLI-and-oidc-client)
+[Silent Refresh - Refreshing Access Tokens when using the Implicit Flow](https://www.scottbrady91.com/OpenID-Connect/Silent-Refresh-Refreshing-Access-Tokens-when-using-the-Implicit-Flow)
+
+## Tasks
+
+[ ] - handling error with silent token renewal

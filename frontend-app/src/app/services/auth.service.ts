@@ -11,6 +11,10 @@ export class AuthService {
     this.manager.getUser().then(user => {
       this.user = user;
     });
+
+    this.manager.events.addSilentRenewError(function () {
+      console.error("Problem with silent token renewal");
+    });
   }
 
   isLoggedIn(): boolean {
@@ -46,6 +50,8 @@ export function getClientSettings(): UserManagerSettings {
     response_type: "id_token token",
     scope: "openid profile api1",
     filterProtocolClaims: true,
-    loadUserInfo: true
+    loadUserInfo: true,
+    automaticSilentRenew: true,
+    silent_redirect_uri: 'http://localhost:4200/assets/silent-refresh.html'
   };
 }

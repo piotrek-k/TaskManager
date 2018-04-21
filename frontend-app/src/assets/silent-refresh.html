@@ -1,0 +1,14 @@
+<head>
+    <title></title>
+</head>
+
+<body>
+    <script src="libs_for_assets/oidc-client.min.js"></script>
+    <script>
+        console.log("Reloading token");
+        new Oidc.UserManager().signinSilentCallback()
+            .catch((err) => {
+                console.log(err);
+            });
+    </script>
+</body>
