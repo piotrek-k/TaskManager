@@ -4,8 +4,8 @@ export class ProjectDTO {
 
     init(data?: any) {
         if (data) {
-            this.id = data["id"];
-            this.name = data["name"];
+            this.id = data["Id"];
+            this.name = data["Name"];
         }
     }
 
@@ -18,8 +18,8 @@ export class ProjectDTO {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
+        data["Id"] = this.id;
+        data["Name"] = this.name;
         return data; 
     }
 }

@@ -1,3 +1,5 @@
+import { HttpClient } from 'selenium-webdriver/http';
+import { ProjectsService } from './api-handlers/Projects/projects.service';
 import { AuthService } from './services/auth.service';
 import { AuthGuardService } from './services/auth-guard.service';
 import { BrowserModule } from '@angular/platform-browser';
@@ -11,6 +13,8 @@ import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
 import { CallApiComponent } from './call-api/call-api.component';
 
 import { HttpModule } from '@angular/http';
+import { ProjectsOverviewComponent } from './projects-overview/projects-overview.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -18,14 +22,20 @@ import { HttpModule } from '@angular/http';
     AppComponent,
     ProtectedComponent,
     AuthCallbackComponent,
-    CallApiComponent
+    CallApiComponent,
+    ProjectsOverviewComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpModule
+    HttpModule,
+    HttpClientModule
   ],
-  providers: [AuthGuardService, AuthService],
+  providers: [
+    AuthGuardService,
+    AuthService,
+    ProjectsService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

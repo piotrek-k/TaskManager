@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ProtectedComponent } from './protected/protected.component';
 import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
 import { CallApiComponent } from './call-api/call-api.component';
+import { ProjectsOverviewComponent } from './projects-overview/projects-overview.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,11 @@ const routes: Routes = [
   {
     path: 'call-api',
     component: CallApiComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'projects-overview',
+    component: ProjectsOverviewComponent,
     canActivate: [AuthGuardService]
   }
 ];
