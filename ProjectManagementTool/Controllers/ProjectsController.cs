@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagementTool.Models;
 using ProjectManagementTool.Models.DbModels;
+using ProjectManagementTool.Models.DTOs;
 
 namespace ProjectManagementTool.Controllers
 {
@@ -23,9 +24,11 @@ namespace ProjectManagementTool.Controllers
 
         // GET: api/Projects
         [HttpGet]
-        public IEnumerable<Project> GetProjects()
+        public IEnumerable<ProjectDTO> GetProjects()
         {
-            return _context.Projects.Include(x=>x.LongTermGoals).Include(x=>x.Links);
+            //return _context.Projects.Include(x=>x.LongTermGoals).Include(x=>x.Links);
+            var projects = _context.Projects;
+            return ProjectDTO.DbSetToDtoList(projects);
         }
 
         // GET: api/Projects/5
@@ -44,22 +47,28 @@ namespace ProjectManagementTool.Controllers
                 return NotFound();
             }
 
-            return Ok(project);
+            var result = ProjectDTO.DbObjectToDto(project);
+
+            return Ok(result);
         }
 
         // PUT: api/Projects/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProject([FromRoute] int id, [FromBody] Project project)
+        public async Task<IActionResult> PutProject([FromRoute] int id, [FromBody] ProjectDTO dto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != project.Id)
+            if (id != dto.Id)
             {
                 return BadRequest();
             }
+
+            var project = await _context.Projects.SingleOrDefaultAsync(x => x.Id == dto.Id);
+
+            project = ProjectDTO.UpdateDbObjectWithDTO(project, dto);
 
             _context.Entry(project).State = EntityState.Modified;
 
@@ -84,12 +93,14 @@ namespace ProjectManagementTool.Controllers
 
         // POST: api/Projects
         [HttpPost]
-        public async Task<IActionResult> PostProject([FromBody] Project project)
+        public async Task<IActionResult> PostProject([FromBody] ProjectDTO dto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
+            var project = ProjectDTO.UpdateDbObjectWithDTO(new Project(), dto);
 
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
