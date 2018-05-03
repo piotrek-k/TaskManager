@@ -17,7 +17,7 @@ export class ProjectsOverviewComponent implements OnInit {
 
   getSomeData() {
     console.log("I've tried :)");
-    this.projectsService.getProjects().subscribe(response => this.response = response);
+    this.projectsService.getAll().subscribe(response => this.response = response);
   }
 
 }
