@@ -1,3 +1,4 @@
+import { ProjectManagementComponent } from './project-management/project-management.component';
 import { AuthGuardService } from './services/auth-guard.service';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -9,7 +10,8 @@ import { ProjectsOverviewComponent } from './projects-overview/projects-overview
 const routes: Routes = [
   {
     path: '',
-    children: []
+    redirectTo: '/projects-overview',
+    pathMatch: 'full'
   },
   {
     path: 'protected',
@@ -28,6 +30,11 @@ const routes: Routes = [
   {
     path: 'projects-overview',
     component: ProjectsOverviewComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'project/:id',
+    component: ProjectManagementComponent,
     canActivate: [AuthGuardService]
   }
 ];

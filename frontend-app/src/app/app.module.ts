@@ -17,6 +17,7 @@ import { HttpModule } from '@angular/http';
 import { ProjectsOverviewComponent } from './projects-overview/projects-overview.component';
 import { HttpClientModule } from '@angular/common/http';
 import { LinksService } from './api-handlers/Links/links.service';
+import { ProjectManagementComponent } from './project-management/project-management.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { LinksService } from './api-handlers/Links/links.service';
     ProtectedComponent,
     AuthCallbackComponent,
     CallApiComponent,
-    ProjectsOverviewComponent
+    ProjectsOverviewComponent,
+    ProjectManagementComponent
   ],
   imports: [
     BrowserModule,
