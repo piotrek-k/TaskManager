@@ -1,3 +1,4 @@
+import { TodoTasksService } from './api-handlers/TodoTasks/todo-tasks.service';
 import { HttpClient } from 'selenium-webdriver/http';
 import { ProjectsService } from './api-handlers/Projects/projects.service';
 import { AuthService } from './services/auth.service';
@@ -15,6 +16,7 @@ import { CallApiComponent } from './call-api/call-api.component';
 import { HttpModule } from '@angular/http';
 import { ProjectsOverviewComponent } from './projects-overview/projects-overview.component';
 import { HttpClientModule } from '@angular/common/http';
+import { LinksService } from './api-handlers/Links/links.service';
 
 
 @NgModule({
@@ -32,9 +34,11 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule
   ],
   providers: [
-    AuthGuardService,
     AuthService,
-    ProjectsService
+    AuthGuardService,
+    ProjectsService,
+    LinksService,
+    TodoTasksService
   ],
   bootstrap: [AppComponent]
 })

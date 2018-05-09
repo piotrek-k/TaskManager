@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { UserManager, UserManagerSettings, User } from 'oidc-client';
+import { UserManager, UserManagerSettings, User, WebStorageStateStore } from 'oidc-client';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class AuthService {
@@ -17,8 +18,35 @@ export class AuthService {
     });
   }
 
+  /**
+   * Returns information about user info availability
+   * 
+   * @returns {boolean} 
+   * @memberof AuthService
+   */
   isLoggedIn(): boolean {
+    if (this.user != null) {
+      console.log("Session expired: " + (this.user.expires_at > Date.now()));
+    }
     return this.user != null && !this.user.expired;
+  }
+
+  /**
+   * Recommended way to check if user is logged in.
+   * Sometimes isLoggiedIn() is called before client load user info from storage
+   * Return Observable so it will all happen in correct order.
+   * 
+   * @returns {Observable<boolean>} 
+   * @memberof AuthService
+   */
+  isLoggedInObs(): Observable<boolean> {
+    return Observable.fromPromise(this.manager.getUser()).map<User, boolean>((user) => {
+      if (user) {
+        return true;
+      } else {
+        return false;
+      }
+    });
   }
 
   getClaims(): any {
