@@ -6,10 +6,10 @@ export class LinkDTO {
 
     init(data?: any) {
         if (data) {
-            this.id = data["id"];
-            this.url = data["url"];
-            this.description = data["description"];
-            this.projectId = data["projectId"];
+            this.id = data["Id"];
+            this.url = data["Url"];
+            this.description = data["Description"];
+            this.projectId = data["ProjectId"];
         }
     }
 
@@ -22,10 +22,10 @@ export class LinkDTO {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["url"] = this.url;
-        data["description"] = this.description;
-        data["projectId"] = this.projectId;
+        data["Id"] = this.id;
+        data["Url"] = this.url;
+        data["Description"] = this.description;
+        data["ProjectId"] = this.projectId;
         return data; 
     }
 }

@@ -2,12 +2,14 @@ export class ColumnDTO {
     id: number;
     name?: string | undefined;
     orderIndex: number;
+    longTermGoalId: number;
 
     init(data?: any) {
         if (data) {
-            this.id = data["id"];
-            this.name = data["name"];
-            this.orderIndex = data["orderIndex"];
+            this.id = data["Id"];
+            this.name = data["Name"];
+            this.orderIndex = data["OrderIndex"];
+            this.longTermGoalId = data["LongTermGoalId"];
         }
     }
 
@@ -20,9 +22,10 @@ export class ColumnDTO {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["orderIndex"] = this.orderIndex;
+        data["Id"] = this.id;
+        data["Name"] = this.name;
+        data["OrderIndex"] = this.orderIndex;
+        data["LongTermGoalId"] = this.longTermGoalId;
         return data; 
     }
 }

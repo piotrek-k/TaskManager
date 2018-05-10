@@ -5,9 +5,9 @@ export class LongTermGoalDTO {
 
     init(data?: any) {
         if (data) {
-            this.id = data["id"];
-            this.name = data["name"];
-            this.projectId = data["projectId"];
+            this.id = data["Id"];
+            this.name = data["Name"];
+            this.projectId = data["ProjectId"];
         }
     }
 
@@ -20,9 +20,9 @@ export class LongTermGoalDTO {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["projectId"] = this.projectId;
+        data["Id"] = this.id;
+        data["Name"] = this.name;
+        data["ProjectId"] = this.projectId;
         return data; 
     }
 }

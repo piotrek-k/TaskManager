@@ -12,6 +12,7 @@ namespace ProjectManagementTool.Models.DTOs
         public int Id { get; set; }
         public string Name { get; set; }
         public int OrderIndex { get; set; }
+        public int LongTermGoalId { get; set; }
 
         public static List<ColumnDTO> DbSetToDtoList(DbSet<Column> columns)
         {
@@ -29,7 +30,8 @@ namespace ProjectManagementTool.Models.DTOs
             {
                 Id = column.Id,
                 Name = column.Name,
-                OrderIndex = column.OrderIndex
+                OrderIndex = column.OrderIndex,
+                LongTermGoalId = column.LongTermGoalId
             };
         }
 
@@ -37,6 +39,7 @@ namespace ProjectManagementTool.Models.DTOs
         {
             column.Name = dto.Name;
             column.OrderIndex = dto.OrderIndex;
+            column.LongTermGoalId = dto.LongTermGoalId;
 
             return column;
         }

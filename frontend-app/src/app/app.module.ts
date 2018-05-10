@@ -1,3 +1,4 @@
+import { ColumnsService } from './api-handlers/Columns/columns.service';
 import { TodoTasksService } from './api-handlers/TodoTasks/todo-tasks.service';
 import { HttpClient } from 'selenium-webdriver/http';
 import { ProjectsService } from './api-handlers/Projects/projects.service';
@@ -18,6 +19,7 @@ import { ProjectsOverviewComponent } from './projects-overview/projects-overview
 import { HttpClientModule } from '@angular/common/http';
 import { LinksService } from './api-handlers/Links/links.service';
 import { ProjectManagementComponent } from './project-management/project-management.component';
+import { LongTermGoalsService } from './api-handlers/LongTermGoals/long-term-goals.service';
 
 
 @NgModule({
@@ -40,7 +42,9 @@ import { ProjectManagementComponent } from './project-management/project-managem
     AuthGuardService,
     ProjectsService,
     LinksService,
-    TodoTasksService
+    TodoTasksService,
+    LongTermGoalsService,
+    ColumnsService
   ],
   bootstrap: [AppComponent]
 })
