@@ -20,6 +20,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LinksService } from './api-handlers/Links/links.service';
 import { ProjectManagementComponent } from './project-management/project-management.component';
 import { LongTermGoalsService } from './api-handlers/LongTermGoals/long-term-goals.service';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { LongTermGoalsService } from './api-handlers/LongTermGoals/long-term-goa
     BrowserModule,
     AppRoutingModule,
     HttpModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [
     AuthService,

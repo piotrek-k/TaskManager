@@ -23,6 +23,8 @@ export class ProjectManagementComponent implements OnInit {
   tasks: TodoTaskDTO[];
   links: LinkDTO[];
 
+  newLongTermGoal: LongTermGoalDTO = new LongTermGoalDTO();
+
   constructor(
     private route: ActivatedRoute,
     private projectsService: ProjectsService,
@@ -34,6 +36,15 @@ export class ProjectManagementComponent implements OnInit {
 
   ngOnInit() {
     this.loadProjectDetails();
+  }
+
+  createNewLTG(){
+    console.log(this.newLongTermGoal);
+    this.newLongTermGoal.projectId = this.project.id;
+    this.longTermGoalService.post<LongTermGoalDTO>(this.newLongTermGoal).subscribe(response => {
+      this.longTermGoals.push(response);
+    });
+    this.newLongTermGoal = new LongTermGoalDTO();
   }
 
   loadProjectDetails() {

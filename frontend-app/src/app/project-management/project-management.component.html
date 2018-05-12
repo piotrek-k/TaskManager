@@ -1,5 +1,6 @@
 <div *ngIf="project">
     <h1>{{project.name}}</h1>
+    <input [(ngModel)] = "newLongTermGoal.name" (keyup.enter)="createNewLTG()" placeholder="Create new LTG">
     <div *ngFor="let ltg of longTermGoals">
         -{{ltg.name}}
         <div *ngFor="let column of getColumnsForLTG(ltg.id)">
