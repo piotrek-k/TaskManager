@@ -13,6 +13,8 @@ namespace ProjectManagementTool.Models.DbModels
         public int ProjectId { get; set; }
         public Project Project { get; set; }
 
+        public DateTimeOffset? LastModified { get; set; }
+
         public List<Column> Columns { get; set; }
     }
 }

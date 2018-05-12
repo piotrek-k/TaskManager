@@ -31,6 +31,14 @@ namespace ProjectManagementTool.Controllers
             return ProjectDTO.DbSetToDtoList(projects);
         }
 
+        // GET: api/Projects
+        [HttpGet("/MostRecent")]
+        public IEnumerable<ProjectDTO> GetMostRecent()
+        {
+            var projects = _context.Projects.OrderByDescending(x=>x.LastModified).Take(10);
+            return ProjectDTO.DbSetToDtoList(projects);
+        }
+
         // GET: api/Projects/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProject([FromRoute] int id)

@@ -13,7 +13,7 @@ namespace ProjectManagementTool.Models.DTOs
         public string Name { get; set; }
         public int ProjectId { get; set; }
 
-        public static List<LongTermGoalDTO> DbSetToDtoList(DbSet<LongTermGoal> ltgs)
+        public static List<LongTermGoalDTO> DbSetToDtoList(IEnumerable<LongTermGoal> ltgs)
         {
             var dtosToReturn = new List<LongTermGoalDTO>();
             foreach (var l in ltgs)

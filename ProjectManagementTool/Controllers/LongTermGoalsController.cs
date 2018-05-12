@@ -30,6 +30,22 @@ namespace ProjectManagementTool.Controllers
             return LongTermGoalDTO.DbSetToDtoList(ltgs);
         }
 
+        // GET: api/LongTermGoals/GetManyByProjectId/{id}
+        [HttpGet("/GetManyByProjectId/{id}")]
+        public IEnumerable<LongTermGoalDTO> GetManyByProjectId([FromRoute] int id)
+        {
+            var ltgs = _context.LongTermGoals.Where(x => x.ProjectId == id);
+            return LongTermGoalDTO.DbSetToDtoList(ltgs);
+        }
+
+        // GET: api/LongTermGoals/GetMostRecent
+        [HttpGet("/GetMostRecent")]
+        public IEnumerable<LongTermGoalDTO> GetMostRecent()
+        {
+            var ltgs = _context.LongTermGoals.OrderByDescending(x => x.LastModified).Take(10);
+            return LongTermGoalDTO.DbSetToDtoList(ltgs);
+        }
+
         // GET: api/LongTermGoals/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetLongTermGoal([FromRoute] int id)

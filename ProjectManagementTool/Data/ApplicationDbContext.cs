@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ProjectManagementTool.Interfaces;
 using ProjectManagementTool.Models.DbModels;
 using System;
 using System.Collections.Generic;
@@ -25,5 +26,27 @@ namespace ProjectManagementTool.Models
         public DbSet<TodoTask> TodoTasks { get; set; }
         public DbSet<Link> Links { get; set; }
         public DbSet<Column> Columns { get; set; }
+
+        /// <summary>
+        /// Modified version of EF SaveChanges method. Runs additional query modifications.
+        /// </summary>
+        /// <returns></returns>
+        public override int SaveChanges()
+        {
+            KeepLastModificationDateUpdated();
+            return base.SaveChanges();
+        }
+
+        /// <summary>
+        /// Runs methods responsible for consistency of LastModified value
+        /// </summary>
+        public void KeepLastModificationDateUpdated()
+        {
+            var entires = ChangeTracker.Entries<ILastModificationTracking>();
+            foreach(var entry in entires)
+            {
+                entry.Entity.KeepParentsLastModificationValueUpdated();
+            }
+        }
     }
 }

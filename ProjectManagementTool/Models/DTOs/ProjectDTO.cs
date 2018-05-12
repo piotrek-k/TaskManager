@@ -12,7 +12,7 @@ namespace ProjectManagementTool.Models.DTOs
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public static List<ProjectDTO> DbSetToDtoList(DbSet<Project> projects)
+        public static List<ProjectDTO> DbSetToDtoList(IEnumerable<Project> projects)
         {
             var dtosToReturn = new List<ProjectDTO>();
             foreach (var p in projects)
