@@ -31,7 +31,7 @@ namespace ProjectManagementTool.Controllers
         }
 
         // GET: api/LongTermGoals/GetManyByProjectId/{id}
-        [HttpGet("/GetManyByProjectId/{id}")]
+        [HttpGet("GetManyByProjectId/{id}")]
         public IEnumerable<LongTermGoalDTO> GetManyByProjectId([FromRoute] int id)
         {
             var ltgs = _context.LongTermGoals.Where(x => x.ProjectId == id);
@@ -39,7 +39,7 @@ namespace ProjectManagementTool.Controllers
         }
 
         // GET: api/LongTermGoals/GetMostRecent
-        [HttpGet("/GetMostRecent")]
+        [HttpGet("GetMostRecent")]
         public IEnumerable<LongTermGoalDTO> GetMostRecent()
         {
             var ltgs = _context.LongTermGoals.OrderByDescending(x => x.LastModified).Take(10);
