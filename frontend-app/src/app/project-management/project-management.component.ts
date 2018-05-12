@@ -38,11 +38,18 @@ export class ProjectManagementComponent implements OnInit {
 
   loadProjectDetails() {
     const id = +this.route.snapshot.paramMap.get('id');
-    this.projectsService.get<ProjectDTO>(id).subscribe(response => this.project = response);
-    this.longTermGoalService.getAll<LongTermGoalDTO>().subscribe(response => this.longTermGoals = response);
-    this.columnsSevice.getAll<ColumnDTO>().subscribe(response => this.columns = response);
-    this.todotaskSerice.getAll<TodoTaskDTO>().subscribe(response => this.tasks = response);
-    this.linksService.getAll<LinkDTO>().subscribe(response => this.links = response);
+    this.projectsService.get<ProjectDTO>(id).subscribe(response => {
+      this.project = response;
+      
+      this.longTermGoalService.getManyByProjectId(this.project.id)
+        .subscribe(
+          response => this.longTermGoals = response
+        );
+      this.columnsSevice.getMany<ColumnDTO>().subscribe(response => this.columns = response);
+      this.todotaskSerice.getMany<TodoTaskDTO>().subscribe(response => this.tasks = response);
+      this.linksService.getMany<LinkDTO>().subscribe(response => this.links = response);
+    });
+    
   }
 
   getColumnsForLTG(ltgId: number): ColumnDTO[] {

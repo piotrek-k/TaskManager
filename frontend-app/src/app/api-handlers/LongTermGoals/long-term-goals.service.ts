@@ -18,19 +18,27 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
 @Injectable()
 export class LongTermGoalsService extends BaseApiHandler {
-    constructor(authService: AuthService, @Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
-        super(
-          authService,
-          http,
-          baseUrl ? baseUrl : "http://localhost:5003/api/LongTermGoals",
-          new HttpHeaders({
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-            "Authorization": authService.getAuthorizationHeaderValue()
-          }));
-      }
-    
-      protected fromJsConversion(data: any) : any{
-        return LongTermGoalDTO.fromJS(data);
-      }
+  constructor(authService: AuthService, @Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+    super(
+      authService,
+      http,
+      baseUrl ? baseUrl : "http://localhost:5003/api/LongTermGoals",
+      new HttpHeaders({
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": authService.getAuthorizationHeaderValue()
+      }));
+  }
+
+  protected fromJsConversion(data: any): any {
+    return LongTermGoalDTO.fromJS(data);
+  }
+
+  getManyByProjectId(projectId: number) {
+    return this.getMany<LongTermGoalDTO>(
+      "/GetManyByProjectId/{projectId}",
+      {
+        "project": projectId
+      });
+  }
 }
