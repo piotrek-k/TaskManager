@@ -38,7 +38,7 @@ export class LongTermGoalsService extends BaseApiHandler {
     return this.getMany<LongTermGoalDTO>(
       "/GetManyByProjectId/{projectId}",
       {
-        "project": projectId
+        "projectId": projectId
       });
   }
 }

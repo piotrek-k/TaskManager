@@ -39,12 +39,15 @@ export class BaseApiHandler {
      */
     getMany<T>(additionToBaseURL?: string, parametersToReplace?: {}): Observable<T[] | null> {
         //TODO: zabezpieczyc przed sytuacja zapomnienia o \
-        let url_ = this.baseUrl + additionToBaseURL;
+        let url_ = this.baseUrl;
+        if(additionToBaseURL){
+            url_ += additionToBaseURL;
+        }
         url_ = url_.replace(/[?&]$/, "");
         for (let key in parametersToReplace) {
             let paramInURL = "{" + key + "}";
             var re = new RegExp("\{" + key + "\}", "g");
-            url_ = url_.replace(re, key);
+            url_ = url_.replace(re, parametersToReplace[key]);
         }
 
         let options_: any = {

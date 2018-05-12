@@ -24,9 +24,9 @@ export class ProjectsOverviewComponent implements OnInit {
   }
 
   getSomeData() {
-    this.projectsService.getAll<ProjectDTO>().subscribe(response => this.recentProjects = response);
-    this.linksService.getAll<LinkDTO>().subscribe(response => this.linksToRead = response);
-    this.todotasksService.getAll<TodoTaskDTO>().subscribe(response => this.recentTodoTasks = response);
+    this.projectsService.getMany<ProjectDTO>().subscribe(response => this.recentProjects = response);
+    this.linksService.getMany<LinkDTO>().subscribe(response => this.linksToRead = response);
+    this.todotasksService.getMany<TodoTaskDTO>().subscribe(response => this.recentTodoTasks = response);
   }
 
 }
