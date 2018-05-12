@@ -120,7 +120,7 @@ namespace ProjectManagementTool.Controllers
             _context.LongTermGoals.Add(ltg);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetLongTermGoal", new { id = ltg.Id }, ltg);
+            return CreatedAtAction("GetLongTermGoal", new { id = ltg.Id }, LongTermGoalDTO.DbObjectToDto(ltg));
         }
 
         // DELETE: api/LongTermGoals/5
