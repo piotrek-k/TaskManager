@@ -49,7 +49,7 @@ export class ProjectManagementComponent implements OnInit {
 
   loadProjectDetails() {
     const id = +this.route.snapshot.paramMap.get('id');
-    this.projectsService.get<ProjectDTO>(id).subscribe(response => {
+    this.projectsService.getWithId<ProjectDTO>(id).subscribe(response => {
       this.project = response;
       
       this.longTermGoalService.getManyByProjectId(this.project.id)

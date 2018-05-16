@@ -38,35 +38,17 @@ export class BaseApiHandler {
      * @memberof BaseApiHandler
      */
     getMany<T>(additionToBaseURL?: string, parametersToReplace?: {}): Observable<T[] | null> {
-        //TODO: zabezpieczyc przed sytuacja zapomnienia o \
-        let url_ = this.baseUrl;
-        if (additionToBaseURL) {
-            url_ += additionToBaseURL;
-        }
-        url_ = url_.replace(/[?&]$/, "");
-        for (let key in parametersToReplace) {
-            let paramInURL = "{" + key + "}";
-            var re = new RegExp("\{" + key + "\}", "g");
-            url_ = url_.replace(re, parametersToReplace[key]);
-        }
+        let url_ = this.prepareApiUrl(additionToBaseURL, parametersToReplace);
 
         let options_: any = {
             observe: "response",
-            responseType: "blob",
             headers: this.headers
         };
 
         return this.http.request("get", url_, options_).flatMap((response_: any) => {
             return this.processGetMany<T>(response_);
         }).catch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetMany<T>(<any>response_);
-                } catch (e) {
-                    return <Observable<T[] | null>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<T[] | null>><any>Observable.throw(response_);
+            return <Observable<T[] | null>><any>Observable.throw(response_);
         });
     }
 
@@ -84,31 +66,26 @@ export class BaseApiHandler {
 
     protected processGetMany<T>(response: HttpResponseBase): Observable<T[] | null> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
         if (status === 200) {
-            return blobToText(responseBlob).flatMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                if (resultData200 && resultData200.constructor === Array) {
-                    result200 = [];
-                    for (let item of resultData200)
-                        result200.push(this.fromJsConversion(item));
-                }
-                return Observable.of(result200);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).flatMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
+            let result200;
+            let resultData200 = response instanceof HttpResponse ? response.body : undefined;
+            if (resultData200 && resultData200.constructor === Array) {
+                result200 = [];
+                for (let item of resultData200)
+                    result200.push(this.fromJsConversion(item));
+            }
+            return Observable.of(result200);
+        } else {
+            throw Error("Something went wrong");
         }
-        return Observable.of<T[] | null>(<any>null);
     }
 
     post<T>(dto: T | null): Observable<T | null> {
+        return this.postWithUrlAddition(dto, "");
+    }
+
+    postWithUrlAddition<T>(dto: T | null, additionToUrl: string): Observable<T | null> {
         let url_ = this.baseUrl;
         url_ = url_.replace(/[?&]$/, "");
 
@@ -129,7 +106,7 @@ export class BaseApiHandler {
 
     protected processPost<T>(response: HttpResponseBase): Observable<T | null> {
         const status = response.status;
-        
+
         if (status == 201) {
             const resultData200 = response instanceof HttpResponse ? response.body : undefined;
 
@@ -143,12 +120,14 @@ export class BaseApiHandler {
         return Observable.of<T | null>(<any>null);
     }
 
-    get<T>(id: number): Observable<T | null> {
-        let url_ = this.baseUrl + "/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
+    getWithId<T>(id: number): Observable<T | null> {
+        return this.get<T>("/{id}", {
+            "id": id
+        });
+    }
+
+    get<T>(additionToBaseURL?: string, parametersToReplace?: {}): Observable<T | null> {
+        let url_ = this.prepareApiUrl(additionToBaseURL, parametersToReplace);
 
         let options_: any = {
             observe: "response",
@@ -183,100 +162,95 @@ export class BaseApiHandler {
         return Observable.of<T | null>(<any>null);
     }
 
-    put<T>(id: number, dto: T | null): Observable<FileResponse | null> {
-        let url_ = this.baseUrl + "/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
+    putWithId<T>(id: number, dto: T | null): Observable<T | null> {
+        return this.put<T>(dto, "/{id}", {
+            "id": id
+        });
+    }
+
+    put<T>(dto: T | null, additionToBaseURL?: string, parametersToReplace?: {}): Observable<T | null> {
+        let url_ = this.prepareApiUrl(additionToBaseURL, parametersToReplace);
 
         const content_ = JSON.stringify(dto);
 
         let options_: any = {
             body: content_,
             observe: "response",
-            responseType: "blob",
             headers: this.headers
         };
 
         return this.http.request("put", url_, options_).flatMap((response_: any) => {
-            return this.processPut(response_);
+            return this.processPut<T>(response_);
         }).catch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processPut(<any>response_);
-                } catch (e) {
-                    return <Observable<FileResponse | null>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<FileResponse | null>><any>Observable.throw(response_);
+            return <Observable<T | null>><any>Observable.throw(response_);
         });
     }
 
-    protected processPut(response: HttpResponseBase): Observable<FileResponse | null> {
+    protected processPut<T>(response: HttpResponseBase): Observable<T | null> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            return Observable.of({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).flatMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
+        if (status == 200 || status == 204) {
+            const resultData200 = response instanceof HttpResponse ? response.body : undefined;
+
+            if (resultData200) {
+                return Observable.of(this.fromJsConversion(resultData200));
+            }
         }
-        return Observable.of<FileResponse | null>(<any>null);
+        else {
+            throw new Error("Object not updated");
+        }
+        return Observable.of<T | null>(<any>null);
     }
 
-    delete(id: number): Observable<FileResponse | null> {
-        let url_ = this.baseUrl + "/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
+    deleteById(id: number): Observable<any | null> {
+        return this.delete("/{id}", {
+            "id": id
+        });
+    }
+
+    delete(additionToBaseURL?: string, parametersToReplace?: {}): Observable<any | null> {
+        let url_ = this.prepareApiUrl(additionToBaseURL, parametersToReplace);
 
         let options_: any = {
             observe: "response",
-            responseType: "blob",
             headers: this.headers
         };
 
         return this.http.request("delete", url_, options_).flatMap((response_: any) => {
             return this.processDelete(response_);
         }).catch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processDelete(<any>response_);
-                } catch (e) {
-                    return <Observable<FileResponse | null>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<FileResponse | null>><any>Observable.throw(response_);
+            return <any>Observable.throw(response_);
         });
     }
 
-    protected processDelete(response: HttpResponseBase): Observable<FileResponse | null> {
+    protected processDelete(response: HttpResponseBase): Observable<any | null> {
         const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
 
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } };
-        if (status === 200 || status === 206) {
-            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
-            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
-            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
-            return Observable.of({ fileName: fileName, data: <any>responseBlob, status: status, headers: _headers });
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).flatMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
+        return Observable.of<any | null>(status);
+    }
+
+    /**
+     * Replaces variables in URL with real data
+     *      
+     * @protected
+     * @param {string} additionToBaseURL 
+     * @param {{}} parametersToReplace 
+     * @returns {string} 
+     * @memberof BaseApiHandler
+     */
+    protected prepareApiUrl(additionToBaseURL: string, parametersToReplace: {}): string {
+        //TODO: zabezpieczyc przed sytuacja zapomnienia o \
+        let url_ = this.baseUrl;
+        if (additionToBaseURL) {
+            url_ += additionToBaseURL;
         }
-        return Observable.of<FileResponse | null>(<any>null);
+        url_ = url_.replace(/[?&]$/, "");
+        for (let key in parametersToReplace) {
+            let paramInURL = "{" + key + "}";
+            var re = new RegExp("\{" + key + "\}", "g");
+            url_ = url_.replace(re, parametersToReplace[key]);
+        }
+
+        return url_;
     }
 }
