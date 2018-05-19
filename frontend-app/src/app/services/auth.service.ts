@@ -53,6 +53,16 @@ export class AuthService {
     return this.user.profile;
   }
 
+  getUserName() : Observable<string> {
+    return Observable.fromPromise(this.manager.getUser()).map<User, string>((user) => {
+      if (user) {
+        return user.profile.name;
+      } else {
+        return "";
+      }
+    });
+  }
+
   getAuthorizationHeaderValue(): string {
     return `${this.user.token_type} ${this.user.access_token}`;
   }

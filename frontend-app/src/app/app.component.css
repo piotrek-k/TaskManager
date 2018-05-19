@@ -1,0 +1,8 @@
+footer {
+    border-style: solid;
+    border-color: rgb(185, 185, 185);
+    border-width: thin 0px 0px 0px;
+    margin-top: 5rem;
+    padding-top: 0.5rem;
+    font-size: small;
+}
