@@ -21,6 +21,7 @@ export class ProjectManagementComponent implements OnInit {
   longTermGoals: LongTermGoalDTO[];
   columns: ColumnDTO[];
   tasks: TodoTaskDTO[];
+  temporaryTask: TodoTaskDTO; //for creating new task
   links: LinkDTO[];
 
   newLongTermGoal: LongTermGoalDTO = new LongTermGoalDTO();
@@ -75,6 +76,11 @@ export class ProjectManagementComponent implements OnInit {
       return this.tasks.filter((x) => { return x.columnId == taskId });
     }
     return [];
+  }
+
+  newTemporaryTask(event : any){
+    this.temporaryTask = new TodoTaskDTO();
+    
   }
 
 }

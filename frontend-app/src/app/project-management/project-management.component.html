@@ -1,15 +1,28 @@
 <div *ngIf="project">
     <h1>{{project.name}}</h1>
-    <input [(ngModel)] = "newLongTermGoal.name" (keyup.enter)="createNewLTG()" placeholder="Create new LTG">
+    <input [(ngModel)]="newLongTermGoal.name" (keyup.enter)="createNewLTG()" placeholder="Create new LTG">
+
     <div *ngFor="let ltg of longTermGoals">
-        -{{ltg.name}}
-        <div *ngFor="let column of getColumnsForLTG(ltg.id)">
-            --{{column.name}}
-            <div *ngFor="let task of getTasksForColumn(column.id)">
-                ---{{task.content}}
+        <h3>{{ltg.name}}</h3>
+        <div class="container">
+            <div class="row">
+                <div class="col" *ngFor="let column of getColumnsForLTG(ltg.id)">
+                    {{column.name}}
+                    <div class="ltg-column">
+                        <div *ngFor="let task of getTasksForColumn(column.id)">
+                            <div class="info-box">{{task.content}}</div>
+                        </div>
+                        <div *ngIf="temporaryTask">
+                            <div class="info-box">{{task.content}}</div>
+                        </div>
+                        <button (click)="newTemporaryTask($event)">+</button>
+                    </div>
+                </div>
             </div>
         </div>
+        <hr>
     </div>
+
     <h2>Saved links:</h2>
     <div *ngFor="let link of links">
         <ul>

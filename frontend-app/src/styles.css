@@ -1,1 +1,35 @@
 /* You can add global styles to this file, and also import other style files */
+
+.info-box {
+    position: relative;
+    display: inline-table;
+    width: 10rem;
+    height: 6rem;
+    margin: 0.2rem;
+    box-shadow: 1px 1px 5px #888;
+    background-color: rgb(27, 165, 0);
+    color: #fff;
+}
+
+.info-box:hover {
+    /* filter: brightness(85%); */
+    text-decoration: none;
+    box-shadow: none;
+    color: #fff;
+}
+
+.info-box-main-text {
+    text-align: center;
+    padding: 1rem;
+}
+
+.info-box-additional-info {
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    background-color: #000;
+    opacity: .4;
+    margin: 0;
+    padding: 0;
+    bottom: 0;
+}
