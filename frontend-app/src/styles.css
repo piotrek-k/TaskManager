@@ -33,3 +33,8 @@
     padding: 0;
     bottom: 0;
 }
+
+/* Ensures that angular's [hidden] attribute won't be overriden */
+[hidden] {
+    display: none !important;
+}

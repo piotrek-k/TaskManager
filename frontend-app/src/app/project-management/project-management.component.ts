@@ -1,7 +1,7 @@
 import { LinkDTO } from './../DTOs/LinkDTO';
 import { LinksService } from './../api-handlers/Links/links.service';
 import { TodoTasksService } from './../api-handlers/TodoTasks/todo-tasks.service';
-import { Component, OnInit, Input, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, ChangeDetectorRef, ViewChildren, QueryList } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProjectDTO } from '../DTOs/ProjectDTO';
 import { ProjectsService } from '../api-handlers/Projects/projects.service';
@@ -24,11 +24,11 @@ export class ProjectManagementComponent implements OnInit {
   links: LinkDTO[];
 
   temporaryTask: TodoTaskDTO = new TodoTaskDTO(); //for creating new task
-  newTaskIdBeingCreated = false;
+  columnWhereNewTaskIdIsBeingCreated = -1;
 
   newLongTermGoal: LongTermGoalDTO = new LongTermGoalDTO();
 
-  @ViewChild('tempTaskInput') temporaryTaskInput: ElementRef;
+  @ViewChildren('tempTaskInput') temporaryTaskInputs;
 
   constructor(
     private route: ActivatedRoute,
@@ -82,16 +82,19 @@ export class ProjectManagementComponent implements OnInit {
     return [];
   }
 
-  newTemporaryTask(event: any) {
-    this.newTaskIdBeingCreated = true;
+  newTemporaryTask(event: any, columnId) {
+    this.columnWhereNewTaskIdIsBeingCreated = columnId;
     //this.temporaryTask = new TodoTaskDTO();
-    console.log(this.temporaryTaskInput);
-    setTimeout(() => this.temporaryTaskInput.nativeElement.focus());
+    console.log(this.temporaryTaskInputs);
+    setTimeout(() => this.temporaryTaskInputs
+      .find(x=>x.nativeElement.getAttribute("columnid") == this.columnWhereNewTaskIdIsBeingCreated)
+      .nativeElement.focus()
+    );
   }
 
   abandonTempTask() {
     this.temporaryTask.content = "";
-    this.newTaskIdBeingCreated = false;
+    this.columnWhereNewTaskIdIsBeingCreated = -1;
   }
 
   saveTempTask(columnId) {

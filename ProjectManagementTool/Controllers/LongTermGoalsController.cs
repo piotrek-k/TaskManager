@@ -117,6 +117,11 @@ namespace ProjectManagementTool.Controllers
 
             var ltg = LongTermGoalDTO.UpdateDbObjectWithDTO(new LongTermGoal(), dto);
 
+            ltg.Columns = new List<Column>();
+            ltg.Columns.Add(new Column { Name = "Todo" });
+            ltg.Columns.Add(new Column { Name = "Doing" });
+            ltg.Columns.Add(new Column { Name = "Done" });
+
             _context.LongTermGoals.Add(ltg);
             await _context.SaveChangesAsync();
 

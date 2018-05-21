@@ -12,13 +12,13 @@
                         <div *ngFor="let task of getTasksForColumn(column.id)">
                             <div class="info-box">{{task.content}}</div>
                         </div>
-                        <div [hidden]="!newTaskIdBeingCreated">
+                        <div [hidden]="columnWhereNewTaskIdIsBeingCreated!=column.id">
                             <div class="info-box">
                                 {{temporaryTask.content}}
-                                <input #tempTaskInput [(ngModel)]="temporaryTask.content" (keyup.enter)="saveTempTask(column.id)" (blur)="abandonTempTask()" type="text" />
+                                <input #tempTaskInput [attr.columnid]="column.id" [(ngModel)]="temporaryTask.content" (keyup.enter)="saveTempTask(column.id)" (blur)="abandonTempTask()" type="text" />
                             </div>
                         </div>
-                        <button (click)="newTemporaryTask($event)">+</button>
+                        <button (click)="newTemporaryTask($event, column.id)">+</button>
                     </div>
                 </div>
             </div>
