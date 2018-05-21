@@ -12,6 +12,7 @@ namespace ProjectManagementTool.Models.DTOs
         public int Id { get; set; }
         public string Name { get; set; }
         public int ProjectId { get; set; }
+        public bool Archived { get; set; }
 
         public static List<LongTermGoalDTO> DbSetToDtoList(IEnumerable<LongTermGoal> ltgs)
         {
@@ -29,7 +30,8 @@ namespace ProjectManagementTool.Models.DTOs
             {
                 Id = ltg.Id,
                 Name = ltg.Name,
-                ProjectId = ltg.ProjectId
+                ProjectId = ltg.ProjectId,
+                Archived = ltg.Archived
             };
         }
 
@@ -37,6 +39,7 @@ namespace ProjectManagementTool.Models.DTOs
         {
             ltg.Name = dto.Name;
             ltg.ProjectId = dto.ProjectId;
+            ltg.Archived = dto.Archived;
 
             return ltg;
         }

@@ -2,12 +2,14 @@ export class LongTermGoalDTO {
     id: number;
     name?: string | undefined;
     projectId: number;
+    archived: boolean;
 
     init(data?: any) {
         if (data) {
             this.id = data["Id"];
             this.name = data["Name"];
             this.projectId = data["ProjectId"];
+            this.archived = data["Archived"];
         }
     }
 
@@ -23,6 +25,7 @@ export class LongTermGoalDTO {
         data["Id"] = this.id;
         data["Name"] = this.name;
         data["ProjectId"] = this.projectId;
+        data["Archived"] = this.archived;
         return data; 
     }
 }

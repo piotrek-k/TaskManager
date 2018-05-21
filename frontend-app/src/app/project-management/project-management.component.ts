@@ -151,4 +151,14 @@ export class ProjectManagementComponent implements OnInit {
     });
     this.abandonTempTask();
   }
+
+  addToArchive(ltgId){
+    for(let l in this.longTermGoals){
+      if(this.longTermGoals[l].id == ltgId){
+        this.longTermGoals[l].archived = true;
+        this.longTermGoalService.putWithId(ltgId, this.longTermGoals[l]).subscribe();
+        break;
+      }
+    }
+  }
 }

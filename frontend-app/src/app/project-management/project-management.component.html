@@ -3,22 +3,26 @@
     <input [(ngModel)]="newLongTermGoal.name" (keyup.enter)="createNewLTG()" placeholder="Create new LTG">
 
     <div *ngFor="let ltg of longTermGoals">
-        <h3>{{ltg.name}}</h3>
-        <div class="container">
-            <div class="row">
-                <div class="col ltg-column-parent" *ngFor="let column of getLocallyStoredColumnsForLTG(ltg.id)">
-                    {{column.name}}
-                    <div class="ltg-column-inside" [dragula]='"bagOne"' [attr.columnid]="column.id">
-                        <div *ngFor="let task of getTasksForColumn(column.id)" class="task-box" [attr.taskid]="task.id">
-                            {{task.content}}
-                        </div>
+        <div *ngIf="ltg.archived">Item succesfully archived. You can restore it in "Archive" section</div>
+        <div *ngIf="!ltg.archived">
+            <h3>{{ltg.name}}</h3>
+            <button (click)="addToArchive(ltg.id)">Add to archive</button>
+            <div class="container">
+                <div class="row">
+                    <div class="col ltg-column-parent" *ngFor="let column of getLocallyStoredColumnsForLTG(ltg.id)">
+                        {{column.name}}
+                        <div class="ltg-column-inside" [dragula]='"bagOne"' [attr.columnid]="column.id">
+                            <div *ngFor="let task of getTasksForColumn(column.id)" class="task-box" [attr.taskid]="task.id">
+                                {{task.content}}
+                            </div>
 
-                        <div class="task-box" [hidden]="columnWhereNewTaskIdIsBeingCreated!=column.id">
-                            {{temporaryTask.content}}
-                            <input #tempTaskInput [attr.columnid]="column.id" [(ngModel)]="temporaryTask.content" (keyup.enter)="saveTempTask(column.id)"
-                                (blur)="abandonTempTask()" type="text" />
+                            <div class="task-box" [hidden]="columnWhereNewTaskIdIsBeingCreated!=column.id">
+                                {{temporaryTask.content}}
+                                <input #tempTaskInput [attr.columnid]="column.id" [(ngModel)]="temporaryTask.content" (keyup.enter)="saveTempTask(column.id)"
+                                    (blur)="abandonTempTask()" type="text" />
+                            </div>
+                            <button (click)="newTemporaryTask($event, column.id)">+</button>
                         </div>
-                        <button (click)="newTemporaryTask($event, column.id)">+</button>
                     </div>
                 </div>
             </div>
