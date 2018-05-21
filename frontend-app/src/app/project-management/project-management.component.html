@@ -6,16 +6,18 @@
         <h3>{{ltg.name}}</h3>
         <div class="container">
             <div class="row">
-                <div class="col" *ngFor="let column of getColumnsForLTG(ltg.id)">
+                <div class="col ltg-column-parent" *ngFor="let column of getColumnsForLTG(ltg.id)">
                     {{column.name}}
-                    <div class="ltg-column">
-                        <div *ngFor="let task of getTasksForColumn(column.id)">
-                            <div class="info-box">{{task.content}}</div>
+                    <div class="ltg-column-inside">
+                        <div *ngFor="let task of getTasksForColumn(column.id)" class="info-box">
+                            {{task.content}}
                         </div>
+
                         <div [hidden]="columnWhereNewTaskIdIsBeingCreated!=column.id">
                             <div class="info-box">
                                 {{temporaryTask.content}}
-                                <input #tempTaskInput [attr.columnid]="column.id" [(ngModel)]="temporaryTask.content" (keyup.enter)="saveTempTask(column.id)" (blur)="abandonTempTask()" type="text" />
+                                <input #tempTaskInput [attr.columnid]="column.id" [(ngModel)]="temporaryTask.content" (keyup.enter)="saveTempTask(column.id)"
+                                    (blur)="abandonTempTask()" type="text" />
                             </div>
                         </div>
                         <button (click)="newTemporaryTask($event, column.id)">+</button>

@@ -1,4 +1,9 @@
-.ltg-column {
+.ltg-column-parent {
+    margin: 1px;
+    padding: 0;
+}
+
+.ltg-column-inside {
     background-color: rgb(219, 219, 219);
-    border: white solid 1px;
+    /* border: white solid 1px; */
 }
