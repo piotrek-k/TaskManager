@@ -30,6 +30,13 @@ namespace ProjectManagementTool.Controllers
             return ColumnDTO.DbSetToDtoList(columns);
         }
 
+        [HttpGet("GetForLTG/{ltgID}")]
+        public IEnumerable<ColumnDTO> GetColumnsForLTG([FromRoute] int ltgID)
+        {
+            var columns = _context.Columns.Where(x=>x.LongTermGoalId == ltgID);
+            return ColumnDTO.DbSetToDtoList(columns);
+        }
+
         // GET: api/Columns/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetColumn([FromRoute] int id)

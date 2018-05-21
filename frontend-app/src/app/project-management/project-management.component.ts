@@ -47,6 +47,7 @@ export class ProjectManagementComponent implements OnInit {
     console.log(this.newLongTermGoal);
     this.newLongTermGoal.projectId = this.project.id;
     this.longTermGoalService.post<LongTermGoalDTO>(this.newLongTermGoal).subscribe(response => {
+      this.downloadColumnsForLTG(response.id);
       this.longTermGoals.push(response);
     });
     this.newLongTermGoal = new LongTermGoalDTO();
@@ -68,11 +69,28 @@ export class ProjectManagementComponent implements OnInit {
 
   }
 
-  getColumnsForLTG(ltgId: number): ColumnDTO[] {
+  getLocallyStoredColumnsForLTG(ltgId: number): ColumnDTO[] {
     if (this.columns) {
       return this.columns.filter((x) => { return x.longTermGoalId == ltgId });
     }
     return [];
+  }
+
+  downloadColumnsForLTG(ltgId: number){
+    this.columnsService.getManyByLongTermGoalId(ltgId).subscribe((response) => {
+      for(let r in response){
+        let foundExisting = false;
+        for(let c in this.columns){
+          if(response[r].id == this.columns[c].id){
+            foundExisting = true;
+            break;
+          }
+        }
+        if(!foundExisting){
+          this.columns.push(response[r]);
+        }
+      }
+    });
   }
 
   getTasksForColumn(taskId: number): TodoTaskDTO[] {

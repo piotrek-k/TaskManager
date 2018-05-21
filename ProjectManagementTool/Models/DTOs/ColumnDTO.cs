@@ -14,7 +14,7 @@ namespace ProjectManagementTool.Models.DTOs
         public int OrderIndex { get; set; }
         public int LongTermGoalId { get; set; }
 
-        public static List<ColumnDTO> DbSetToDtoList(DbSet<Column> columns)
+        public static List<ColumnDTO> DbSetToDtoList(IEnumerable<Column> columns)
         {
             var dtosToReturn = new List<ColumnDTO>();
             foreach (var c in columns)

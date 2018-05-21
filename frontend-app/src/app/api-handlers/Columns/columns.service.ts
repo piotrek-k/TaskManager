@@ -33,4 +33,12 @@ export class ColumnsService extends BaseApiHandler {
       protected fromJsConversion(data: any) : any{
         return ColumnDTO.fromJS(data);
       }
+
+      getManyByLongTermGoalId(ltgId: number) {
+        return this.getMany<ColumnDTO>(
+          "/GetForLTG/{ltgId}",
+          {
+            "ltgId": ltgId
+          });
+      }
 }

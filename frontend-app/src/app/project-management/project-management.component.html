@@ -6,7 +6,7 @@
         <h3>{{ltg.name}}</h3>
         <div class="container">
             <div class="row">
-                <div class="col ltg-column-parent" *ngFor="let column of getColumnsForLTG(ltg.id)">
+                <div class="col ltg-column-parent" *ngFor="let column of getLocallyStoredColumnsForLTG(ltg.id)">
                     {{column.name}}
                     <div class="ltg-column-inside">
                         <div *ngFor="let task of getTasksForColumn(column.id)" class="info-box">
