@@ -12,8 +12,11 @@
                         <div *ngFor="let task of getTasksForColumn(column.id)">
                             <div class="info-box">{{task.content}}</div>
                         </div>
-                        <div *ngIf="temporaryTask">
-                            <div class="info-box">{{task.content}}</div>
+                        <div [hidden]="!newTaskIdBeingCreated">
+                            <div class="info-box">
+                                {{temporaryTask.content}}
+                                <input #tempTaskInput [(ngModel)]="temporaryTask.content" (keyup.enter)="saveTempTask(column.id)" (blur)="abandonTempTask()" type="text" />
+                            </div>
                         </div>
                         <button (click)="newTemporaryTask($event)">+</button>
                     </div>

@@ -1,7 +1,7 @@
 import { LinkDTO } from './../DTOs/LinkDTO';
 import { LinksService } from './../api-handlers/Links/links.service';
 import { TodoTasksService } from './../api-handlers/TodoTasks/todo-tasks.service';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProjectDTO } from '../DTOs/ProjectDTO';
 import { ProjectsService } from '../api-handlers/Projects/projects.service';
@@ -21,17 +21,21 @@ export class ProjectManagementComponent implements OnInit {
   longTermGoals: LongTermGoalDTO[];
   columns: ColumnDTO[];
   tasks: TodoTaskDTO[];
-  temporaryTask: TodoTaskDTO; //for creating new task
   links: LinkDTO[];
 
+  temporaryTask: TodoTaskDTO = new TodoTaskDTO(); //for creating new task
+  newTaskIdBeingCreated = false;
+
   newLongTermGoal: LongTermGoalDTO = new LongTermGoalDTO();
+
+  @ViewChild('tempTaskInput') temporaryTaskInput: ElementRef;
 
   constructor(
     private route: ActivatedRoute,
     private projectsService: ProjectsService,
     private longTermGoalService: LongTermGoalsService,
-    private columnsSevice: ColumnsService,
-    private todotaskSerice: TodoTasksService,
+    private columnsService: ColumnsService,
+    private todotaskService: TodoTasksService,
     private linksService: LinksService) {
   }
 
@@ -39,7 +43,7 @@ export class ProjectManagementComponent implements OnInit {
     this.loadProjectDetails();
   }
 
-  createNewLTG(){
+  createNewLTG() {
     console.log(this.newLongTermGoal);
     this.newLongTermGoal.projectId = this.project.id;
     this.longTermGoalService.post<LongTermGoalDTO>(this.newLongTermGoal).subscribe(response => {
@@ -52,16 +56,16 @@ export class ProjectManagementComponent implements OnInit {
     const id = +this.route.snapshot.paramMap.get('id');
     this.projectsService.getWithId<ProjectDTO>(id).subscribe(response => {
       this.project = response;
-      
+
       this.longTermGoalService.getManyByProjectId(this.project.id)
         .subscribe(
           response => this.longTermGoals = response
         );
-      this.columnsSevice.getMany<ColumnDTO>().subscribe(response => this.columns = response);
-      this.todotaskSerice.getMany<TodoTaskDTO>().subscribe(response => this.tasks = response);
+      this.columnsService.getMany<ColumnDTO>().subscribe(response => this.columns = response);
+      this.todotaskService.getMany<TodoTaskDTO>().subscribe(response => this.tasks = response);
       this.linksService.getMany<LinkDTO>().subscribe(response => this.links = response);
     });
-    
+
   }
 
   getColumnsForLTG(ltgId: number): ColumnDTO[] {
@@ -78,9 +82,24 @@ export class ProjectManagementComponent implements OnInit {
     return [];
   }
 
-  newTemporaryTask(event : any){
-    this.temporaryTask = new TodoTaskDTO();
-    
+  newTemporaryTask(event: any) {
+    this.newTaskIdBeingCreated = true;
+    //this.temporaryTask = new TodoTaskDTO();
+    console.log(this.temporaryTaskInput);
+    setTimeout(() => this.temporaryTaskInput.nativeElement.focus());
   }
 
+  abandonTempTask() {
+    this.temporaryTask.content = "";
+    this.newTaskIdBeingCreated = false;
+  }
+
+  saveTempTask(columnId) {
+    console.log("Posting tag")
+    this.temporaryTask.columnId = columnId;
+    this.todotaskService.post<TodoTaskDTO>(this.temporaryTask).subscribe(response => {
+      this.tasks.push(response);
+    });
+    this.abandonTempTask();
+  }
 }
