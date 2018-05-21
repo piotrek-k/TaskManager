@@ -21,6 +21,7 @@ import { LinksService } from './api-handlers/Links/links.service';
 import { ProjectManagementComponent } from './project-management/project-management.component';
 import { LongTermGoalsService } from './api-handlers/LongTermGoals/long-term-goals.service';
 import { FormsModule } from '@angular/forms';
+import { DragulaModule } from 'ng2-dragula';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { FormsModule } from '@angular/forms';
     AppRoutingModule,
     HttpModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    DragulaModule
   ],
   providers: [
     AuthService,

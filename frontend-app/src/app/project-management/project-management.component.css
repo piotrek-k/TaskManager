@@ -1,9 +1,20 @@
 .ltg-column-parent {
     margin: 1px;
     padding: 0;
+    padding-bottom: 1rem;
 }
 
 .ltg-column-inside {
     background-color: rgb(219, 219, 219);
+    height: 100%;
     /* border: white solid 1px; */
+}
+
+.task-box {
+    width: 10rem;
+    height: 6rem;
+    background-color: white;
+    border-color: yellow;
+    border: solid 5px;
+    color: black; 
 }

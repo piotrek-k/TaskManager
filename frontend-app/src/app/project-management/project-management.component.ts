@@ -10,11 +10,14 @@ import { LongTermGoalDTO } from '../DTOs/LongTermGoalDTO';
 import { ColumnDTO } from '../DTOs/ColumnDTO';
 import { ColumnsService } from '../api-handlers/Columns/columns.service';
 import { TodoTaskDTO } from '../DTOs/TodoTaskDTO';
+import { DragulaService } from 'ng2-dragula';
 
 @Component({
   selector: 'app-project-management',
   templateUrl: './project-management.component.html',
-  styleUrls: ['./project-management.component.css']
+  styleUrls: [
+    './project-management.component.css',
+    '../../../node_modules/dragula/dist/dragula.css']
 })
 export class ProjectManagementComponent implements OnInit {
   @Input() project: ProjectDTO;
@@ -36,7 +39,32 @@ export class ProjectManagementComponent implements OnInit {
     private longTermGoalService: LongTermGoalsService,
     private columnsService: ColumnsService,
     private todotaskService: TodoTasksService,
-    private linksService: LinksService) {
+    private linksService: LinksService,
+    private dragulaService: DragulaService) {
+    dragulaService.drop.subscribe((value) => {
+      console.log(`drop: ${value[0]}`);
+      this.onDrop(value);
+    });
+  }
+
+  /**
+   * Called when task is being moved from one column to another
+   * 
+   * @private
+   * @param {any} args 
+   * @memberof ProjectManagementComponent
+   */
+  private onDrop(args) {
+    let [el, target, source, sibling] = args;
+    let modifiedTaskId: number = target.getAttribute("taskid");
+    let targetColumnId: number = source.getAttribute("columnid");
+    for (let t in this.tasks) {
+      if (this.tasks[t].id == modifiedTaskId) {
+        this.tasks[t].columnId = targetColumnId;
+        this.todotaskService.putWithId(modifiedTaskId, this.tasks[t]).subscribe();
+        break;
+      }
+    }
   }
 
   ngOnInit() {
@@ -76,17 +104,17 @@ export class ProjectManagementComponent implements OnInit {
     return [];
   }
 
-  downloadColumnsForLTG(ltgId: number){
+  downloadColumnsForLTG(ltgId: number) {
     this.columnsService.getManyByLongTermGoalId(ltgId).subscribe((response) => {
-      for(let r in response){
+      for (let r in response) {
         let foundExisting = false;
-        for(let c in this.columns){
-          if(response[r].id == this.columns[c].id){
+        for (let c in this.columns) {
+          if (response[r].id == this.columns[c].id) {
             foundExisting = true;
             break;
           }
         }
-        if(!foundExisting){
+        if (!foundExisting) {
           this.columns.push(response[r]);
         }
       }
@@ -105,7 +133,7 @@ export class ProjectManagementComponent implements OnInit {
     //this.temporaryTask = new TodoTaskDTO();
     console.log(this.temporaryTaskInputs);
     setTimeout(() => this.temporaryTaskInputs
-      .find(x=>x.nativeElement.getAttribute("columnid") == this.columnWhereNewTaskIdIsBeingCreated)
+      .find(x => x.nativeElement.getAttribute("columnid") == this.columnWhereNewTaskIdIsBeingCreated)
       .nativeElement.focus()
     );
   }
