@@ -1,6 +1,7 @@
 export class TodoTaskDTO {
     id: number;
     content?: string | undefined;
+    details?: string | undefined;
     date?: Date | undefined;
     columnId: number;
 
@@ -8,6 +9,7 @@ export class TodoTaskDTO {
         if (data) {
             this.id = data["Id"];
             this.content = data["Content"];
+            this.details = data["Details"];
             this.date = data["Date"] ? new Date(data["Date"].toString()) : <any>undefined;
             this.columnId = data["ColumnId"];
         }
@@ -24,6 +26,7 @@ export class TodoTaskDTO {
         data = typeof data === 'object' ? data : {};
         data["Id"] = this.id;
         data["Content"] = this.content;
+        data["Details"] = this.details;
         data["Date"] = this.date ? this.date.toISOString() : <any>undefined;
         data["ColumnId"] = this.columnId;
         return data; 

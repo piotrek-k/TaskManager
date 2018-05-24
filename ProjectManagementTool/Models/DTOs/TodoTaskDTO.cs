@@ -11,6 +11,7 @@ namespace ProjectManagementTool.Models.DTOs
     {
         public int Id { get; set; }
         public string Content { get; set; }
+        public string Details { get; set; }
         public DateTimeOffset? Date { get; set; }
         public int ColumnId { get; set; }
 
@@ -30,6 +31,7 @@ namespace ProjectManagementTool.Models.DTOs
             {
                 Id = task.Id,
                 Content = task.Content,
+                Details = task.Details,
                 Date = task.Date,
                 ColumnId = task.ColumnId
             };
@@ -38,6 +40,7 @@ namespace ProjectManagementTool.Models.DTOs
         public static TodoTask UpdateDbObjectWithDTO(TodoTask task, TodoTaskDTO dto)
         {
             task.Content = dto.Content;
+            task.Details = dto.Details;
             //task.Date = task.Date; //chyba nie ma potrzeby zmieniać
             task.ColumnId = dto.ColumnId;
 

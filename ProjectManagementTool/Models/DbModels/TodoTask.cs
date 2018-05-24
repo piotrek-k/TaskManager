@@ -9,7 +9,15 @@ namespace ProjectManagementTool.Models.DbModels
     public class TodoTask : ILastModificationTracking
     {
         public int Id { get; set; }
+        /// <summary>
+        /// The purpose of this variable changed. It's now meant to be "Title".
+        /// For additional markdown text check for 'Details'.
+        /// </summary>
         public string Content { get; set; }
+        /// <summary>
+        /// This is where markdown text lands
+        /// </summary>
+        public string Details { get; set; }
         public DateTimeOffset? Date { get; set; }
 
         public int ColumnId { get; set; }
