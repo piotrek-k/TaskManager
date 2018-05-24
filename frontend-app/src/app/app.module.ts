@@ -1,3 +1,4 @@
+import { BsModalService, ModalModule, ModalBackdropComponent } from 'ngx-bootstrap/modal';
 import { ColumnsService } from './api-handlers/Columns/columns.service';
 import { TodoTasksService } from './api-handlers/TodoTasks/todo-tasks.service';
 import { HttpClient } from 'selenium-webdriver/http';
@@ -22,9 +23,12 @@ import { ProjectManagementComponent } from './project-management/project-managem
 import { LongTermGoalsService } from './api-handlers/LongTermGoals/long-term-goals.service';
 import { FormsModule } from '@angular/forms';
 import { DragulaModule } from 'ng2-dragula';
+import { MarkdownModule } from 'ngx-markdown';
 
 //bootstrap
 import { CollapseModule, BsDropdownModule } from 'ngx-bootstrap';
+import { TaskDetailsComponent } from './task-details/task-details.component';
+import { LtgDetailsComponent } from './ltg-details/ltg-details.component';
 
 
 @NgModule({
@@ -34,7 +38,9 @@ import { CollapseModule, BsDropdownModule } from 'ngx-bootstrap';
     AuthCallbackComponent,
     CallApiComponent,
     ProjectsOverviewComponent,
-    ProjectManagementComponent
+    ProjectManagementComponent,
+    TaskDetailsComponent,
+    LtgDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +50,12 @@ import { CollapseModule, BsDropdownModule } from 'ngx-bootstrap';
     FormsModule,
     DragulaModule,
     BsDropdownModule.forRoot(),
-    CollapseModule.forRoot()
+    CollapseModule.forRoot(),
+    ModalModule.forRoot(),
+    MarkdownModule.forRoot()
+  ],
+  entryComponents: [
+    TaskDetailsComponent
   ],
   providers: [
     AuthService,
@@ -53,7 +64,8 @@ import { CollapseModule, BsDropdownModule } from 'ngx-bootstrap';
     LinksService,
     TodoTasksService,
     LongTermGoalsService,
-    ColumnsService
+    ColumnsService,
+    BsModalService
   ],
   bootstrap: [AppComponent]
 })

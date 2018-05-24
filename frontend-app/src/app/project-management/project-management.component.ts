@@ -1,3 +1,4 @@
+import { TaskDetailsComponent } from './../task-details/task-details.component';
 import { LinkDTO } from './../DTOs/LinkDTO';
 import { LinksService } from './../api-handlers/Links/links.service';
 import { TodoTasksService } from './../api-handlers/TodoTasks/todo-tasks.service';
@@ -11,6 +12,9 @@ import { ColumnDTO } from '../DTOs/ColumnDTO';
 import { ColumnsService } from '../api-handlers/Columns/columns.service';
 import { TodoTaskDTO } from '../DTOs/TodoTaskDTO';
 import { DragulaService } from 'ng2-dragula';
+
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
 @Component({
   selector: 'app-project-management',
@@ -33,6 +37,8 @@ export class ProjectManagementComponent implements OnInit {
 
   @ViewChildren('tempTaskInput') temporaryTaskInputs;
 
+  bsModalRef: BsModalRef;
+
   constructor(
     private route: ActivatedRoute,
     private projectsService: ProjectsService,
@@ -40,7 +46,8 @@ export class ProjectManagementComponent implements OnInit {
     private columnsService: ColumnsService,
     private todotaskService: TodoTasksService,
     private linksService: LinksService,
-    private dragulaService: DragulaService) {
+    private dragulaService: DragulaService,
+    private modalService: BsModalService) {
     dragulaService.drop.subscribe((value) => {
       console.log(`drop: ${value[0]}`);
       this.onDrop(value);
@@ -160,5 +167,13 @@ export class ProjectManagementComponent implements OnInit {
         break;
       }
     }
+  }
+
+  openTaskDetails(taskId: number, taskName: string){
+    const initialState = {
+      taskId: taskId,
+      taskName: taskName
+    };
+    this.bsModalRef = this.modalService.show(TaskDetailsComponent, {initialState});
   }
 }

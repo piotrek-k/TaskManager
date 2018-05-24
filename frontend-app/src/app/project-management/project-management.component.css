@@ -21,6 +21,7 @@
     padding-top: 1rem;
 }
 
-.dropdown-task-container {
-    min-height: 2rem;
+.task-table-bottom-buttons {
+    position: relative;
+    bottom: 0px;
 }

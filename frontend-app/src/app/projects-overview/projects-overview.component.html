@@ -5,7 +5,7 @@
   </div>
 </div>
 
-<h2>Recent tasks</h2>
+<h2>Ostatnio aktywne taski</h2>
 <div>
   <div *ngFor="let task of recentTodoTasks" class="info-box">
     <div class="info-box-main-text">
@@ -16,7 +16,7 @@
     </div>
   </div>
 </div>
-<h2>Recent projects</h2>
+<h2>Ostatnio aktywne projekty</h2>
 <div>
   <a *ngFor="let project of recentProjects" routerLink="/project/{{project.id}}" class="info-box">
     <div class="info-box-main-text">
@@ -27,7 +27,7 @@
     </div>
   </a>
 </div>
-<h2>Links to read</h2>
+<h2>Zapisane linki</h2>
 <ul>
   <li *ngFor="let link of linksToRead">
     <a href="{{link.url}}">{{link.description}}</a>

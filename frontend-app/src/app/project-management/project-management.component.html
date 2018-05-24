@@ -11,20 +11,21 @@
                 <div class="row">
                     <div class="col ltg-column-parent" *ngFor="let column of getLocallyStoredColumnsForLTG(ltg.id)">
                         {{column.name}}
-                        <div class="ltg-column-inside">
-                            <div class="dropdown-task-containter" [dragula]='"bagOne"' [attr.columnid]="column.id">
-                                <div *ngFor="let task of getTasksForColumn(column.id)" class="task-box" [attr.taskid]="task.id">
-                                    {{task.content}}
-                                </div>
-
-                                <div class="task-box" [hidden]="columnWhereNewTaskIdIsBeingCreated!=column.id">
-                                    {{temporaryTask.content}}
-                                    <input #tempTaskInput [attr.columnid]="column.id" [(ngModel)]="temporaryTask.content" (keyup.enter)="saveTempTask(column.id)"
-                                        (blur)="abandonTempTask()" type="text" />
-                                </div>
+                        <div class="ltg-column-inside" [dragula]='"bagOne"' [attr.columnid]="column.id">
+                            <div *ngFor="let task of getTasksForColumn(column.id)" class="task-box" [attr.taskid]="task.id" (click)="openTaskDetails(task.id, task.content)">
+                                {{task.content}}
                             </div>
+
+                            <div class="task-box" [hidden]="columnWhereNewTaskIdIsBeingCreated!=column.id">
+                                {{temporaryTask.content}}
+                                <input #tempTaskInput [attr.columnid]="column.id" [(ngModel)]="temporaryTask.content" (keyup.enter)="saveTempTask(column.id)"
+                                    (blur)="abandonTempTask()" type="text" />
+                            </div>
+                        </div>
+                        <div class="task-table-bottom-buttons">
                             <button (click)="newTemporaryTask($event, column.id)">+</button>
                         </div>
+
                     </div>
                 </div>
             </div>
