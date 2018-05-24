@@ -13,8 +13,14 @@
 .task-box {
     width: 10rem;
     height: 6rem;
-    background-color: white;
-    border-color: yellow;
-    border: solid 5px;
     color: black; 
+    background-color: white;
+    border: 1px solid lightgray;
+    border-left: 7px solid yellow;
+    padding-left: 1rem;
+    padding-top: 1rem;
+}
+
+.dropdown-task-container {
+    min-height: 2rem;
 }
