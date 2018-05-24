@@ -9,6 +9,7 @@ import { AuthService } from './services/auth.service';
 export class AppComponent {
   title = 'app';
   username = '';
+  isNavbarCollapsed = true;
   
   constructor(private authService: AuthService) { 
     authService.getUserName().subscribe(x => this.username = x);

@@ -23,6 +23,9 @@ import { LongTermGoalsService } from './api-handlers/LongTermGoals/long-term-goa
 import { FormsModule } from '@angular/forms';
 import { DragulaModule } from 'ng2-dragula';
 
+//bootstrap
+import { CollapseModule, BsDropdownModule } from 'ngx-bootstrap';
+
 
 @NgModule({
   declarations: [
@@ -39,7 +42,9 @@ import { DragulaModule } from 'ng2-dragula';
     HttpModule,
     HttpClientModule,
     FormsModule,
-    DragulaModule
+    DragulaModule,
+    BsDropdownModule.forRoot(),
+    CollapseModule.forRoot()
   ],
   providers: [
     AuthService,
