@@ -159,9 +159,9 @@ export class ProjectManagementComponent implements OnInit {
     this.abandonTempTask();
   }
 
-  addToArchive(ltgId){
-    for(let l in this.longTermGoals){
-      if(this.longTermGoals[l].id == ltgId){
+  addToArchive(ltgId) {
+    for (let l in this.longTermGoals) {
+      if (this.longTermGoals[l].id == ltgId) {
         this.longTermGoals[l].archived = true;
         this.longTermGoalService.putWithId(ltgId, this.longTermGoals[l]).subscribe();
         break;
@@ -169,11 +169,21 @@ export class ProjectManagementComponent implements OnInit {
     }
   }
 
-  openTaskDetails(taskId: number, taskName: string){
+  openTaskDetails(taskId: number, taskName: string) {
+    //open task-details modal
     const initialState = {
       taskId: taskId,
       taskName: taskName
     };
-    this.bsModalRef = this.modalService.show(TaskDetailsComponent, {initialState});
+    this.bsModalRef = this.modalService.show(TaskDetailsComponent, { initialState, class: 'modal-lg' });
+    this.bsModalRef.content.taskChangedAction.subscribe((value) => {
+      // updating task with modified version (from modal)
+      for(let t in this.tasks){
+        if(this.tasks[t].id == value.modifiedTaskObject.id){
+          this.tasks[t] = value.modifiedTaskObject;
+          break;
+        }
+      }
+    });
   }
 }

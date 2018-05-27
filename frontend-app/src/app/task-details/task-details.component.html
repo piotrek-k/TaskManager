@@ -1,20 +1,25 @@
 <div class="modal-header">
-  <h4 class="modal-title pull-left">{{taskName}}</h4>
-  <button class="btn btn-default" (click)="editModeEnabled=!editModeEnabled">Toggle edit mode</button>
+  <h4 class="modal-title pull-left">{{taskObject?taskObject.content:taskName}}</h4>
+  <button class="btn btn-default ml-3" (click)="editModeEnabled=!editModeEnabled">Toggle edit mode</button>
   <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
 <div *ngIf="taskObject" class="modal-body">
-  <markdown *ngIf="!editModeEnabled">
-    {{taskObject.details}}
-  </markdown>
-  <div *ngIf="!editModeEnabled">
+  <markdown [data]="taskObject.details" *ngIf="!editModeEnabled"></markdown>
+  <!-- <div *ngIf="!editModeEnabled">
     No markdown interpreter:
     {{taskObject.details}}
-  </div>
-  <textarea #taskEditTextarea class="editTaskContentContainer" [hidden]="!editModeEnabled" (focus)="textareaAdjust()" [(ngModel)]="taskObject.details" (keyup)="textareaAdjust()"></textarea>
+  </div> -->
+  <input type="text" class="editTaskContentContainer" [hidden]="!editModeEnabled" [(ngModel)]="taskObject.content"  (ngModelChange)="taskContentSaved=false" />
+  <textarea #taskEditTextarea class="editTaskContentContainer" [hidden]="!editModeEnabled" (focus)="textareaAdjust()" [(ngModel)]="taskObject.details" (keyup)="textareaAdjust()" (ngModelChange)="taskContentSaved=false"></textarea>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-default" (click)="saveChanges()">Save</button>
+  <input type="checkbox" [checked]="enableAutosave" (change)="enableAutosave = !enableAutosave"/>
+  <span>Enable autosave</span>
+  <span><b> | </b></span>
+  <span *ngIf="!taskContentSaved && enableAutosave">Saving...</span>
+  <span *ngIf="!taskContentSaved && !enableAutosave">Not saved. Autosaving disabled.</span>
+  <span *ngIf="taskContentSaved">Saved</span>
+  <button type="button" class="btn btn-default" (click)="saveChanges()">Save and close</button>
 </div>
