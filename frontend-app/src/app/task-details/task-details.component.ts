@@ -63,6 +63,7 @@ export class TaskDetailsComponent implements OnInit {
 
   saveChanges() {
     this.todotaskService.putWithId<TodoTaskDTO>(this.taskId, this.taskObject).subscribe();
+    this.taskChangedAction.emit({modifiedTaskObject: this.taskObject}); //inform parent about changes
     this.bsModalRef.hide();
   }
 

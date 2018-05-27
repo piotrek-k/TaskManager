@@ -5,7 +5,7 @@
     <div *ngFor="let ltg of longTermGoals">
         <div *ngIf="ltg.archived">Item succesfully archived. You can restore it in "Archive" section</div>
         <div *ngIf="!ltg.archived">
-            <h3>{{ltg.name}}</h3>
+            <h3>{{ltg.name}}</h3> <a (click)="openLtgDetails(ltg.id, ltg.name)">[Modify]</a>
             <button (click)="addToArchive(ltg.id)">Add to archive</button>
             <div class="container">
                 <div class="row">
@@ -33,10 +33,10 @@
         <hr>
     </div>
 
-    <h2>Saved links:</h2>
+    <!-- <h2>Saved links:</h2>
     <div *ngFor="let link of links">
         <ul>
             <li>{{link.description}}</li>
         </ul>
-    </div>
+    </div> -->
 </div>

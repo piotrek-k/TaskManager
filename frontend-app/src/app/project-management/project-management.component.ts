@@ -1,3 +1,4 @@
+import { LtgDetailsComponent } from './../ltg-details/ltg-details.component';
 import { TaskDetailsComponent } from './../task-details/task-details.component';
 import { LinkDTO } from './../DTOs/LinkDTO';
 import { LinksService } from './../api-handlers/Links/links.service';
@@ -111,6 +112,18 @@ export class ProjectManagementComponent implements OnInit {
     return [];
   }
 
+  reloadLTG(ltgId:number){
+    this.longTermGoalService.getWithId<LongTermGoalDTO>(ltgId).subscribe(response => {
+      for(let l in this.longTermGoals){
+        if(this.longTermGoals[l].id == ltgId){
+          this.longTermGoals[l] = response;
+          this.downloadColumnsForLTG(ltgId);
+          break;
+        }
+      }
+    });
+  }
+
   downloadColumnsForLTG(ltgId: number) {
     this.columnsService.getManyByLongTermGoalId(ltgId).subscribe((response) => {
       for (let r in response) {
@@ -184,6 +197,18 @@ export class ProjectManagementComponent implements OnInit {
           break;
         }
       }
+    });
+  }
+
+  openLtgDetails(ltgId: number, ltgName: string){
+    const initialState = {
+      ltgId: ltgId,
+      ltgName: ltgName
+    };
+    this.bsModalRef = this.modalService.show(LtgDetailsComponent, { initialState, class: 'modal-lg' });
+    this.bsModalRef.content.taskChangedAction.subscribe((value) => {
+      // updating task with modified version (from modal)
+      this.reloadLTG(ltgId);
     });
   }
 }

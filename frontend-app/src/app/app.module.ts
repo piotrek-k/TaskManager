@@ -55,7 +55,8 @@ import { LtgDetailsComponent } from './ltg-details/ltg-details.component';
     MarkdownModule.forRoot()
   ],
   entryComponents: [
-    TaskDetailsComponent
+    TaskDetailsComponent,
+    LtgDetailsComponent
   ],
   providers: [
     AuthService,

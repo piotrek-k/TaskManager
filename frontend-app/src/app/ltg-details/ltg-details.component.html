@@ -1,3 +1,34 @@
-<p>
-  ltg-details works!
-</p>
+<div class="modal-header">
+  <h4 class="modal-title pull-left">{{ltgObject?ltgObject.name:ltgName}}</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div *ngIf="ltgObject" class="modal-body">
+  <h5>Name: </h5>
+  <input type="text" [(ngModel)]="ltgObject.name" (ngModelChange)="ltgUpdateQueue=true" />
+  <h5>List of columns:</h5>
+  <div class="row" *ngFor="let column of columns">
+    <div class="col">
+      <input type="text" [(ngModel)]="column.name" (ngModelChange)="addColumnToUpdateQueue(column.id)" />
+    </div>
+    <div class="col">
+      <button>Move up</button>
+      <button>Move down</button>
+      <button (click)="deleteColumn(column.id)">Delete</button>
+    </div>
+  </div>
+  <h5>Add new:</h5>
+  <input type="text" [(ngModel)]="newColumnName" (keyup.enter)="createNewColumn()"/>
+</div>
+<div class="modal-footer">
+  <input type="checkbox" [checked]="enableAutosave" (change)="enableAutosave = !enableAutosave" />
+  <span>Enable autosave</span>
+  <span>
+    <b> | </b>
+  </span>
+  <span *ngIf="(ltgUpdateQueue || columnUpdateQueue.length>0) && enableAutosave">Saving...</span>
+  <span *ngIf="!(ltgUpdateQueue || columnUpdateQueue.length>0) && !enableAutosave">Not saved. Autosaving disabled.</span>
+  <span *ngIf="(!ltgUpdateQueue && columnUpdateQueue.length==0)">Saved</span>
+  <button type="button" class="btn btn-default" (click)="saveChanges(true)">Save and close</button>
+</div>
