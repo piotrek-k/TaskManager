@@ -3,7 +3,7 @@ import { TaskDetailsComponent } from './../task-details/task-details.component';
 import { LinkDTO } from './../DTOs/LinkDTO';
 import { LinksService } from './../api-handlers/Links/links.service';
 import { TodoTasksService } from './../api-handlers/TodoTasks/todo-tasks.service';
-import { Component, OnInit, Input, ElementRef, ViewChild, ChangeDetectorRef, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, ChangeDetectorRef, ViewChildren, QueryList, TemplateRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProjectDTO } from '../DTOs/ProjectDTO';
 import { ProjectsService } from '../api-handlers/Projects/projects.service';
@@ -14,8 +14,10 @@ import { ColumnsService } from '../api-handlers/Columns/columns.service';
 import { TodoTaskDTO } from '../DTOs/TodoTaskDTO';
 import { DragulaService } from 'ng2-dragula';
 
-import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-project-management',
@@ -39,9 +41,10 @@ export class ProjectManagementComponent implements OnInit {
   @ViewChildren('tempTaskInput') temporaryTaskInputs;
 
   bsModalRef: BsModalRef;
+  modalSubscriptions: Subscription[] = [];
 
   projectMovedToArchive: boolean = false;
-  
+
   constructor(
     private route: ActivatedRoute,
     private projectsService: ProjectsService,
@@ -50,7 +53,8 @@ export class ProjectManagementComponent implements OnInit {
     private todotaskService: TodoTasksService,
     private linksService: LinksService,
     private dragulaService: DragulaService,
-    private modalService: BsModalService) {
+    private modalService: BsModalService,
+    private changeDetection: ChangeDetectorRef) {
     dragulaService.drop.subscribe((value) => {
       console.log(`drop: ${value[0]}`);
       this.onDrop(value);
@@ -114,10 +118,10 @@ export class ProjectManagementComponent implements OnInit {
     return [];
   }
 
-  reloadLTG(ltgId:number){
+  reloadLTG(ltgId: number) {
     this.longTermGoalService.getWithId<LongTermGoalDTO>(ltgId).subscribe(response => {
-      for(let l in this.longTermGoals){
-        if(this.longTermGoals[l].id == ltgId){
+      for (let l in this.longTermGoals) {
+        if (this.longTermGoals[l].id == ltgId) {
           this.longTermGoals[l] = response;
           this.downloadColumnsForLTG(ltgId);
           break;
@@ -133,6 +137,7 @@ export class ProjectManagementComponent implements OnInit {
         for (let c in this.columns) {
           if (response[r].id == this.columns[c].id) {
             foundExisting = true;
+            this.columns[c] = response[r];
             break;
           }
         }
@@ -193,8 +198,8 @@ export class ProjectManagementComponent implements OnInit {
     this.bsModalRef = this.modalService.show(TaskDetailsComponent, { initialState, class: 'modal-lg' });
     this.bsModalRef.content.taskChangedAction.subscribe((value) => {
       // updating task with modified version (from modal)
-      for(let t in this.tasks){
-        if(this.tasks[t].id == value.modifiedTaskObject.id){
+      for (let t in this.tasks) {
+        if (this.tasks[t].id == value.modifiedTaskObject.id) {
           this.tasks[t] = value.modifiedTaskObject;
           break;
         }
@@ -202,23 +207,34 @@ export class ProjectManagementComponent implements OnInit {
     });
   }
 
-  openLtgDetails(ltgId: number, ltgName: string){
+  openLtgDetails(ltgId: number, ltgName: string) {
     const initialState = {
       ltgId: ltgId,
       ltgName: ltgName
     };
     this.bsModalRef = this.modalService.show(LtgDetailsComponent, { initialState, class: 'modal-lg' });
-    this.bsModalRef.content.taskChangedAction.subscribe((value) => {
-      // updating task with modified version (from modal)
-      this.reloadLTG(ltgId);
-    });
+    this.modalSubscriptions.push(
+      this.modalService.onHide.subscribe((value) => {
+        // updating task with modified version (from modal)
+        this.reloadLTG(ltgId);
+        this.unsubscribeAllModals();
+      })
+    );
   }
 
-  addProjectToArchive(){
+  addProjectToArchive() {
     this.project.archived = true;
     this.projectsService.putWithId(this.project.id, this.project).subscribe(result => {
       this.project = null;
       this.projectMovedToArchive = true;
     });
+  }
+
+  //usunięcie śledzenia eventów związanych z modalami
+  unsubscribeAllModals() {
+    this.modalSubscriptions.forEach((subscription: Subscription) => {
+      subscription.unsubscribe();
+    });
+    this.modalSubscriptions = [];
   }
 }
