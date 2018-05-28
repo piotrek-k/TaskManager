@@ -1,5 +1,5 @@
 <div *ngIf="project">
-    <h1 class="display-2">{{project.name}}</h1>
+    <h1 class="display-3">{{project.name}}</h1>
     <input [(ngModel)]="newLongTermGoal.name" (keyup.enter)="createNewLTG()" placeholder="Utwórz nową podgrupę">
     <hr/>
     <div *ngIf="longTermGoals && longTermGoals.length>0">
@@ -15,7 +15,7 @@
                             {{column.name}}
                             <div class="ltg-column-inside" [dragula]='"bagOne"' [attr.columnid]="column.id">
                                 <div *ngFor="let task of getTasksForColumn(column.id)" class="task-box" [attr.taskid]="task.id" (click)="openTaskDetails(task.id, task.content)">
-                                    {{task.content}}
+                                    <span>{{task.content}}</span>
                                 </div>
 
                                 <div class="task-box" [hidden]="columnWhereNewTaskIdIsBeingCreated!=column.id">

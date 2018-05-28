@@ -8,6 +8,7 @@
     background-color: rgb(219, 219, 219);
     height: 100%;
     min-height: 95px;
+    vertical-align: top;
     /* max-width: 600px; */
     /* border: white solid 1px; */
 }
@@ -19,8 +20,11 @@
     background-color: white;
     border: 1px solid lightgray;
     border-left: 7px solid yellow;
-    padding: 1rem 1rem; /* top-bottom, left-right */
+    padding: 1rem 1rem; /*top-bottom, left-right*/
     display: inline-block;
+    overflow: auto;
+    font-size: small;
+    position: relative;
 }
 
 @media(max-width: 400px){
