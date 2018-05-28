@@ -11,6 +11,7 @@ namespace ProjectManagementTool.Models.DTOs
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public bool Archived { get; set; }
 
         public static List<ProjectDTO> DbSetToDtoList(IEnumerable<Project> projects)
         {
@@ -27,13 +28,15 @@ namespace ProjectManagementTool.Models.DTOs
             return new ProjectDTO()
             {
                 Id = project.Id,
-                Name = project.Name
+                Name = project.Name,
+                Archived = project.Archived
             };
         }
 
         public static Project UpdateDbObjectWithDTO(Project project, ProjectDTO dto)
         {
             project.Name = dto.Name;
+            project.Archived = dto.Archived;
 
             return project;
         }

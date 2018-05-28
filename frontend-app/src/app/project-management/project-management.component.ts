@@ -40,6 +40,8 @@ export class ProjectManagementComponent implements OnInit {
 
   bsModalRef: BsModalRef;
 
+  projectMovedToArchive: boolean = false;
+  
   constructor(
     private route: ActivatedRoute,
     private projectsService: ProjectsService,
@@ -209,6 +211,14 @@ export class ProjectManagementComponent implements OnInit {
     this.bsModalRef.content.taskChangedAction.subscribe((value) => {
       // updating task with modified version (from modal)
       this.reloadLTG(ltgId);
+    });
+  }
+
+  addProjectToArchive(){
+    this.project.archived = true;
+    this.projectsService.putWithId(this.project.id, this.project).subscribe(result => {
+      this.project = null;
+      this.projectMovedToArchive = true;
     });
   }
 }

@@ -26,6 +26,6 @@ export class LongTermGoalDTO {
         data["Name"] = this.name;
         data["ProjectId"] = this.projectId;
         data["Archived"] = this.archived;
-        return data; 
+        return data;
     }
 }

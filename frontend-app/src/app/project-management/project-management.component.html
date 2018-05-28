@@ -1,36 +1,42 @@
 <div *ngIf="project">
-    <h1>{{project.name}}</h1>
-    <input [(ngModel)]="newLongTermGoal.name" (keyup.enter)="createNewLTG()" placeholder="Create new LTG">
+    <h1 class="display-2">{{project.name}}</h1>
+    <input [(ngModel)]="newLongTermGoal.name" (keyup.enter)="createNewLTG()" placeholder="Utwórz nową podgrupę">
+    <hr/>
+    <div *ngIf="longTermGoals && longTermGoals.length>0">
+        <div *ngFor="let ltg of longTermGoals">
+            <div *ngIf="ltg.archived">Item succesfully archived. You can restore it in "Archive" section</div>
+            <div *ngIf="!ltg.archived">
+                <h2>{{ltg.name}}</h2>
+                <button (click)="openLtgDetails(ltg.id, ltg.name)" class="btn btn-primary">Modyfikuj</button>
+                <button (click)="addToArchive(ltg.id)" class="btn btn-secondary">Archiwizuj</button>
+                <div class="container">
+                    <div class="row">
+                        <div class="col ltg-column-parent" *ngFor="let column of getLocallyStoredColumnsForLTG(ltg.id)">
+                            {{column.name}}
+                            <div class="ltg-column-inside" [dragula]='"bagOne"' [attr.columnid]="column.id">
+                                <div *ngFor="let task of getTasksForColumn(column.id)" class="task-box" [attr.taskid]="task.id" (click)="openTaskDetails(task.id, task.content)">
+                                    {{task.content}}
+                                </div>
 
-    <div *ngFor="let ltg of longTermGoals">
-        <div *ngIf="ltg.archived">Item succesfully archived. You can restore it in "Archive" section</div>
-        <div *ngIf="!ltg.archived">
-            <h3>{{ltg.name}}</h3> <a (click)="openLtgDetails(ltg.id, ltg.name)">[Modify]</a>
-            <button (click)="addToArchive(ltg.id)">Add to archive</button>
-            <div class="container">
-                <div class="row">
-                    <div class="col ltg-column-parent" *ngFor="let column of getLocallyStoredColumnsForLTG(ltg.id)">
-                        {{column.name}}
-                        <div class="ltg-column-inside" [dragula]='"bagOne"' [attr.columnid]="column.id">
-                            <div *ngFor="let task of getTasksForColumn(column.id)" class="task-box" [attr.taskid]="task.id" (click)="openTaskDetails(task.id, task.content)">
-                                {{task.content}}
+                                <div class="task-box" [hidden]="columnWhereNewTaskIdIsBeingCreated!=column.id">
+                                    <!-- {{temporaryTask.content}} -->
+                                    <input class="temp-task-input" #tempTaskInput [attr.columnid]="column.id" [(ngModel)]="temporaryTask.content" (keyup.enter)="saveTempTask(column.id)"
+                                        (blur)="abandonTempTask()" type="text" />
+                                </div>
+                            </div>
+                            <div class="task-table-bottom-buttons">
+                                <button (click)="newTemporaryTask($event, column.id)" class="btn">+</button>
                             </div>
 
-                            <div class="task-box" [hidden]="columnWhereNewTaskIdIsBeingCreated!=column.id">
-                                {{temporaryTask.content}}
-                                <input #tempTaskInput [attr.columnid]="column.id" [(ngModel)]="temporaryTask.content" (keyup.enter)="saveTempTask(column.id)"
-                                    (blur)="abandonTempTask()" type="text" />
-                            </div>
                         </div>
-                        <div class="task-table-bottom-buttons">
-                            <button (click)="newTemporaryTask($event, column.id)">+</button>
-                        </div>
-
                     </div>
                 </div>
             </div>
+            <hr>
         </div>
-        <hr>
+    </div>
+    <div *ngIf="!longTermGoals || longTermGoals.length==0">
+        <h2>Brak podgrup projektu</h2>
     </div>
 
     <!-- <h2>Saved links:</h2>
@@ -39,4 +45,9 @@
             <li>{{link.description}}</li>
         </ul>
     </div> -->
+
+    <button class="btn" (click)="addProjectToArchive()">Archiwizuj projekt</button>
+</div>
+<div *ngIf="projectMovedToArchive">
+    <h2>Projekt został przesunięty do archiwum</h2>
 </div>

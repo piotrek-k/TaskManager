@@ -10,6 +10,8 @@ namespace ProjectManagementTool.Models.DbModels
         public int Id { get; set; }
         public string Name { get; set; }
 
+        public bool Archived { get; set; }
+
         public DateTimeOffset? LastModified { get; set; }
 
         public List<LongTermGoal> LongTermGoals { get; set; }

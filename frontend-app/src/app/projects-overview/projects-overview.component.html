@@ -5,7 +5,7 @@
   </div>
 </div>
 
-<h2>Ostatnio aktywne taski</h2>
+<!-- <h2>Ostatnio aktywne taski</h2>
 <div>
   <div *ngFor="let task of recentTodoTasks" class="info-box">
     <div class="info-box-main-text">
@@ -15,21 +15,29 @@
       Project name
     </div>
   </div>
+</div> -->
+<div *ngIf="recentProjects && recentProjects.length>0">
+  <h2>Ostatnio aktywne projekty</h2>
+  <div>
+    <a *ngFor="let project of recentProjects" routerLink="/project/{{project.id}}" class="info-box">
+      <div class="info-box-main-text">
+        <span>{{project.name}}</span>
+      </div>
+      <div class="info-box-additional-info">
+        Project name
+      </div>
+    </a>
+  </div>
 </div>
-<h2>Ostatnio aktywne projekty</h2>
-<div>
-  <a *ngFor="let project of recentProjects" routerLink="/project/{{project.id}}" class="info-box">
-    <div class="info-box-main-text">
-      <span>{{project.name}}</span>
-    </div>
-    <div class="info-box-additional-info">
-      Project name
-    </div>
-  </a>
+<div *ngIf="!recentProjects || recentProjects.length==0">
+  <h2>Brak aktywnych projektów</h2>
 </div>
-<h2>Zapisane linki</h2>
+<hr/>
+<input [(ngModel)]="newProjectName" type="text" />
+<button (click)="createNewProject()" class="btn btn-success">Dodaj nowy projekt</button>
+<!-- <h2>Zapisane linki</h2>
 <ul>
   <li *ngFor="let link of linksToRead">
     <a href="{{link.url}}">{{link.description}}</a>
   </li>
-</ul>
+</ul> -->

@@ -17,6 +17,8 @@ export class ProjectsOverviewComponent implements OnInit {
   linksToRead: LinkDTO[];
   recentTodoTasks: TodoTaskDTO[];
 
+  newProjectName: string;
+
   constructor(private projectsService: ProjectsService, private linksService: LinksService, private todotasksService: TodoTasksService) { }
 
   ngOnInit() {
@@ -24,9 +26,19 @@ export class ProjectsOverviewComponent implements OnInit {
   }
 
   getSomeData() {
-    this.projectsService.getMany<ProjectDTO>().subscribe(response => this.recentProjects = response);
-    this.linksService.getMany<LinkDTO>().subscribe(response => this.linksToRead = response);
-    this.todotasksService.getMany<TodoTaskDTO>().subscribe(response => this.recentTodoTasks = response);
+    this.projectsService.getMostRecent().subscribe(response => this.recentProjects = response);
+    //this.linksService.getMany<LinkDTO>().subscribe(response => this.linksToRead = response);
+    //this.todotasksService.getMany<TodoTaskDTO>().subscribe(response => this.recentTodoTasks = response);
+  }
+
+  createNewProject() {
+    let newProject = new ProjectDTO();
+    newProject.name = this.newProjectName;
+    if (newProject.name != undefined && newProject.name != "") {
+      this.projectsService.post<ProjectDTO>(newProject).subscribe(response => {
+        this.getSomeData();
+      });
+    }
   }
 
 }

@@ -38,3 +38,8 @@
 [hidden] {
     display: none !important;
 }
+
+/* Overrides default bootstrap behaviour */
+.container{
+    max-width: 1400px;
+ }

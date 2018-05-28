@@ -34,5 +34,9 @@ export class ProjectsService extends BaseApiHandler {
   protected fromJsConversion(data: any) : any{
     return ProjectDTO.fromJS(data);
   }
+
+  getMostRecent() : Observable<ProjectDTO[]> {
+    return this.getMany<ProjectDTO>("/MostRecent", {});
+  }
   
 }

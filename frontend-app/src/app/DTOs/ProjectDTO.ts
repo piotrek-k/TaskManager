@@ -1,11 +1,13 @@
 export class ProjectDTO {
     id: number;
-    name?: string | undefined;
+    name: string;
+    archived: boolean;
 
     init(data?: any) {
         if (data) {
             this.id = data["Id"];
             this.name = data["Name"];
+            this.archived = data["Archived"];
         }
     }
 
@@ -20,6 +22,7 @@ export class ProjectDTO {
         data = typeof data === 'object' ? data : {};
         data["Id"] = this.id;
         data["Name"] = this.name;
-        return data; 
+        data["Archived"] = this.archived;
+        return data;
     }
 }

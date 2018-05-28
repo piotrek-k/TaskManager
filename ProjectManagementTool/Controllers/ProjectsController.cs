@@ -32,10 +32,10 @@ namespace ProjectManagementTool.Controllers
         }
 
         // GET: api/Projects
-        [HttpGet("/MostRecent")]
+        [HttpGet("MostRecent")]
         public IEnumerable<ProjectDTO> GetMostRecent()
         {
-            var projects = _context.Projects.OrderByDescending(x=>x.LastModified).Take(10);
+            var projects = _context.Projects.Where(x=>!x.Archived).OrderByDescending(x=>x.LastModified).Take(10);
             return ProjectDTO.DbSetToDtoList(projects);
         }
 

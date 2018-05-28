@@ -1,5 +1,5 @@
 .ltg-column-parent {
-    margin: 1px;
+    margin-bottom: 2rem;
     padding: 0;
     padding-bottom: 1rem;
 }
@@ -7,6 +7,8 @@
 .ltg-column-inside {
     background-color: rgb(219, 219, 219);
     height: 100%;
+    min-height: 95px;
+    /* max-width: 600px; */
     /* border: white solid 1px; */
 }
 
@@ -17,11 +19,24 @@
     background-color: white;
     border: 1px solid lightgray;
     border-left: 7px solid yellow;
-    padding-left: 1rem;
-    padding-top: 1rem;
+    padding: 1rem 1rem; /* top-bottom, left-right */
+    display: inline-block;
+}
+
+@media(max-width: 400px){
+    .task-box{
+        width: 92vw;
+        height: auto;
+    }
 }
 
 .task-table-bottom-buttons {
-    position: relative;
-    bottom: 0px;
+    height:  2rem;
+    /* position: relative;
+    bottom: 1rem; */
+}
+
+.temp-task-input {
+    width: 90%;
+    
 }

@@ -26,6 +26,6 @@ export class ColumnDTO {
         data["Name"] = this.name;
         data["OrderIndex"] = this.orderIndex;
         data["LongTermGoalId"] = this.longTermGoalId;
-        return data; 
+        return data;
     }
 }
