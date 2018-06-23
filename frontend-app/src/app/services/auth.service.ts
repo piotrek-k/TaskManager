@@ -81,7 +81,7 @@ export class AuthService {
 
 export function getClientSettings(): UserManagerSettings {
   return {
-    authority: 'http://localhost:5000/',
+    authority: 'http://localhost:5003/',
     client_id: 'js',
     redirect_uri: 'http://localhost:4200/auth-callback',
     post_logout_redirect_uri: 'http://localhost:4200/',
