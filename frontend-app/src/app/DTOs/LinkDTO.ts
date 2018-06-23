@@ -1,15 +1,17 @@
-export class LinkDTO {
+import { BaseDTO } from './BaseDTO';
+export class LinkDTO extends BaseDTO{
     id: number;
     url?: string | undefined;
     description?: string | undefined;
     projectId: number;
 
     init(data?: any) {
+        data = this.prepareDataIndexes(data);
         if (data) {
-            this.id = data["Id"];
-            this.url = data["Url"];
-            this.description = data["Description"];
-            this.projectId = data["ProjectId"];
+            this.id = data["Id".toLowerCase()];
+            this.url = data["Url".toLowerCase()];
+            this.description = data["Description".toLowerCase()];
+            this.projectId = data["ProjectId".toLowerCase()];
         }
     }
 

@@ -1,15 +1,17 @@
-export class ColumnDTO {
+import { BaseDTO } from './BaseDTO';
+export class ColumnDTO extends BaseDTO {
     id: number;
     name?: string | undefined;
     orderIndex: number;
     longTermGoalId: number;
 
     init(data?: any) {
+        data = this.prepareDataIndexes(data);
         if (data) {
-            this.id = data["Id"];
-            this.name = data["Name"];
-            this.orderIndex = data["OrderIndex"];
-            this.longTermGoalId = data["LongTermGoalId"];
+            this.id = data["Id".toLowerCase()];
+            this.name = data["Name".toLowerCase()];
+            this.orderIndex = data["OrderIndex".toLowerCase()];
+            this.longTermGoalId = data["LongTermGoalId".toLowerCase()];
         }
     }
 

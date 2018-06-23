@@ -1,4 +1,5 @@
-export class TodoTaskDTO {
+import { BaseDTO } from './BaseDTO';
+export class TodoTaskDTO extends BaseDTO {
     id: number;
     content?: string | undefined;
     details?: string | undefined;
@@ -6,12 +7,13 @@ export class TodoTaskDTO {
     columnId: number;
 
     init(data?: any) {
+        data = this.prepareDataIndexes(data);
         if (data) {
-            this.id = data["Id"];
-            this.content = data["Content"];
-            this.details = data["Details"];
-            this.date = data["Date"] ? new Date(data["Date"].toString()) : <any>undefined;
-            this.columnId = data["ColumnId"];
+            this.id = data["Id".toLowerCase()];
+            this.content = data["Content".toLowerCase()];
+            this.details = data["Details".toLowerCase()];
+            this.date = data["Date".toLowerCase()] ? new Date(data["Date".toLowerCase()].toString()) : <any>undefined;
+            this.columnId = data["ColumnId".toLowerCase()];
         }
     }
 
