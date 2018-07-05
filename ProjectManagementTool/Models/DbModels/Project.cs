@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ProjectManagementTool.Models.DbModels
 {
-    public class Project
+    public class Project : _ProtectedTable
     {
         public int Id { get; set; }
         public string Name { get; set; }

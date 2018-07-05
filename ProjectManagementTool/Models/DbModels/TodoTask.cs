@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjectManagementTool.Models.DbModels
 {
-    public class TodoTask : ILastModificationTracking
+    public class TodoTask : _ProtectedTable, ILastModificationTracking
     {
         public int Id { get; set; }
         /// <summary>

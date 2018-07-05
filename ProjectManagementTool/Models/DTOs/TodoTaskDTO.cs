@@ -15,7 +15,7 @@ namespace ProjectManagementTool.Models.DTOs
         public DateTimeOffset? Date { get; set; }
         public int ColumnId { get; set; }
 
-        public static List<TodoTaskDTO> DbSetToDtoList(DbSet<TodoTask> tasks)
+        public static List<TodoTaskDTO> DbSetToDtoList(IEnumerable<TodoTask> tasks)
         {
             var dtosToReturn = new List<TodoTaskDTO>();
             foreach (var t in tasks)

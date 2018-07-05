@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ProjectManagementTool.Controllers.ApiControllers;
 using ProjectManagementTool.Models;
 using ProjectManagementTool.Models.DbModels;
 using ProjectManagementTool.Models.DTOs;
@@ -13,29 +16,49 @@ namespace ProjectManagementTool.Controllers
 {
     [Produces("application/json")]
     [Route("api/Projects")]
-    public class ProjectsController : Controller
+    [Authorize]
+    public class ProjectsController : _BaseController
     {
-        private readonly ApplicationDbContext _context;
-
-        public ProjectsController(ApplicationDbContext context)
+        public ProjectsController(ApplicationDbContext context, UserManager<ApplicationUser> manager) : base(context, manager)
         {
-            _context = context;
         }
 
         // GET: api/Projects
         [HttpGet]
-        public IEnumerable<ProjectDTO> GetProjects()
+        public async Task<IEnumerable<ProjectDTO>> GetProjectsAsync()
         {
             //return _context.Projects.Include(x=>x.LongTermGoals).Include(x=>x.Links);
-            var projects = _context.Projects;
+            var currentUser = await GetCurrentUserAsync();
+            var projects = _context.Projects.Where(x => x.OwnerId == currentUser.Id);
+
+            try
+            {
+                await EnsureAuthorizedAccessAsync(projects);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
             return ProjectDTO.DbSetToDtoList(projects);
         }
 
         // GET: api/Projects
         [HttpGet("MostRecent")]
-        public IEnumerable<ProjectDTO> GetMostRecent()
+        public async Task<IEnumerable<ProjectDTO>> GetMostRecentAsync()
         {
-            var projects = _context.Projects.Where(x=>!x.Archived).OrderByDescending(x=>x.LastModified).Take(10);
+            var currentUser = await GetCurrentUserAsync();
+            var projects = _context.Projects.Where(x => !x.Archived && x.OwnerId == currentUser.Id).OrderByDescending(x => x.LastModified).Take(10);
+
+            try
+            {
+                await EnsureAuthorizedAccessAsync(projects);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
             return ProjectDTO.DbSetToDtoList(projects);
         }
 
@@ -53,6 +76,15 @@ namespace ProjectManagementTool.Controllers
             if (project == null)
             {
                 return NotFound();
+            }
+
+            try
+            {
+                await EnsureAuthorizedAccessAsync(project);
+            }
+            catch (Exception)
+            {
+                return Unauthorized();
             }
 
             var result = ProjectDTO.DbObjectToDto(project);
@@ -75,6 +107,14 @@ namespace ProjectManagementTool.Controllers
             }
 
             var project = await _context.Projects.SingleOrDefaultAsync(x => x.Id == dto.Id);
+            try
+            {
+                await EnsureAuthorizedAccessAsync(project);
+            }
+            catch (Exception)
+            {
+                return Unauthorized();
+            }
 
             project = ProjectDTO.UpdateDbObjectWithDTO(project, dto);
 
@@ -109,6 +149,8 @@ namespace ProjectManagementTool.Controllers
             }
 
             var project = ProjectDTO.UpdateDbObjectWithDTO(new Project(), dto);
+            var currentUser = await GetCurrentUserAsync();
+            project.OwnerId = currentUser.Id;
 
             _context.Projects.Add(project);
             await _context.SaveChangesAsync();
@@ -129,6 +171,14 @@ namespace ProjectManagementTool.Controllers
             if (project == null)
             {
                 return NotFound();
+            }
+            try
+            {
+                await EnsureAuthorizedAccessAsync(project);
+            }
+            catch (Exception)
+            {
+                return Unauthorized();
             }
 
             _context.Projects.Remove(project);
