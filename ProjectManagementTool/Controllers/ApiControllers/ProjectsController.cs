@@ -16,7 +16,7 @@ namespace ProjectManagementTool.Controllers
 {
     [Produces("application/json")]
     [Route("api/Projects")]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class ProjectsController : _BaseController
     {
         public ProjectsController(ApplicationDbContext context, UserManager<ApplicationUser> manager) : base(context, manager)
