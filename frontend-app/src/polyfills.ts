@@ -77,3 +77,8 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+
+
+// Fixing problem with undefined "global" variable (dragula extension)
+// https://github.com/valor-software/ng2-dragula/issues/849#issuecomment-403022990
+(window as any).global = window;
