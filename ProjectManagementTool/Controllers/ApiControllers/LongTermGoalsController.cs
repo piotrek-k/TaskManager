@@ -14,7 +14,7 @@ namespace ProjectManagementTool.Controllers
 {
     [Produces("application/json")]
     [Route("api/LongTermGoals")]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class LongTermGoalsController : Controller
     {
         private readonly ApplicationDbContext _context;

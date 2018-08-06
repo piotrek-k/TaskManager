@@ -16,7 +16,7 @@ namespace ProjectManagementTool.Controllers
 {
     [Produces("application/json")]
     [Route("api/TodoTasks")]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class TodoTasksController : _BaseController
     {
 

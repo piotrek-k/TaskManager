@@ -14,7 +14,7 @@ namespace ProjectManagementTool.Controllers
 {
     [Produces("application/json")]
     [Route("api/Columns")]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class ColumnsController : Controller
     {
         private readonly ApplicationDbContext _context;

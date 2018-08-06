@@ -14,7 +14,7 @@ namespace ProjectManagementTool.Controllers
 {
     [Produces("application/json")]
     [Route("api/Links")]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class LinksController : Controller
     {
         private readonly ApplicationDbContext _context;
